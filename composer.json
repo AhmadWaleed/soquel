@@ -1,23 +1,28 @@
 {
-    "name": ":vendor_name/:package_name",
-    "description": ":package_description",
+    "name": "ahmedwaleed/laravel-soql-builder",
+    "description": "An ORM solution for Salesforce Object Query Language (SOQL)",
     "keywords": [
-        ":vendor_name",
-        ":package_name"
+        "AhmadWaleed",
+        "laravel",
+        "salesforce",
+        "soql",
+        "salesforce object query language",
+        "orm"
     ],
-    "homepage": "https://github.com/:vendor_name/:package_name",
+    "homepage": "https://github.com/AhmadWaleed/laravel-soql-builder",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": ":author_homepage",
+            "name": "AhmadWaleed",
+            "email": "ahmed_waleed1@hotmail.com",
+            "homepage": "https://github.com/AhmadWaleed",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "illuminate/contracts": "^8.0"
+        "laravel/framework": "^8.0",
+        "omniphx/forrest": "^2.11"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
@@ -25,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src",
-            "Spatie\\Skeleton\\Database\\Factories\\": "database/factories"
+            "AhmadWaleed\\LaravelSOQLBuilder\\": "src",
+            "AhmadWaleed\\LaravelSOQLBuilder\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "AhmadWaleed\\SOQLBuilder\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -45,23 +50,13 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Skeleton\\SkeletonServiceProvider"
+              "LaravelSOQLBuilderServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "Spatie\\Skeleton\\SkeletonFacade"
+                "Skeleton": "SOQL\\Skeleton\\SkeletonFacade"
             }
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "funding": [
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/:vendor_name"
-        },
-        {
-            "type": "other",
-            "url": ":author_homepage"
-        }
-    ]
+    "prefer-stable": true
 }

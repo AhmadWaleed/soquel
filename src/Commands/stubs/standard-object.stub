@@ -1,0 +1,52 @@
+<?php
+
+namespace {{ namespace }};
+
+use AhmadWaleed\LaravelSOQLBuilder\Object\SalesForceObject;
+
+class {{ class }} extends SalesForceObject
+{
+    public string $id;
+    public string $name;
+
+    public function toArray(): array
+    {
+        return [
+            'Id' => $this->id,
+            'Name' => $this->name,
+        ];
+    }
+
+    public static function sobject(): string
+    {
+        return {{ class }};
+    }
+
+    public static function sofields(): array
+    {
+        return [
+            'Id',
+            'Name',
+        ];
+    }
+
+    public static function robject(): string
+    {
+        return self::sobject();
+    }
+
+    public static function rofields(): array
+    {
+        return self::sofields();
+    }
+
+    public static function createFromArray(array $object): SalesForceObject
+    {
+        $object = new self();
+
+        $object->id = $object['Id'];
+        $object->name = $object['Name'];
+
+        return $client;
+    }
+}

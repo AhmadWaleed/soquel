@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton;
+namespace AhmedWaleed\LaravelSOQLBuilder;
 
 use Illuminate\Support\Facades\Facade;
 

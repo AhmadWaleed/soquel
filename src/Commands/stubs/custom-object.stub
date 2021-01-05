@@ -17,27 +17,17 @@ class {{ class }} extends SalesForceObject
         ];
     }
 
-    public static function sobject(): string
+    public static function object(): string
     {
-        return {{ class }};
+        return {{ class }}__c;
     }
 
-    public static function sofields(): array
+    public static function fields(): array
     {
         return [
             'Id',
             'Name',
         ];
-    }
-
-    public static function robject(): string
-    {
-        return self::sobject();
-    }
-
-    public static function rofields(): array
-    {
-        return self::sofields();
     }
 
     public static function create(array $object): SalesForceObject

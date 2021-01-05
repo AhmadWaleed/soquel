@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Skeleton\Tests;
+namespace AhmadWaleed\LaravelSOQLBuilder\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\Skeleton\LaravelSOQLBuilderServiceProvider;
+use AhmadWaleed\LaravelSOQLBuilder\Tests\Fakes\Client;
+use AhmadWaleed\LaravelSOQLBuilder\LaravelSOQLBuilderServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -12,9 +12,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Spatie\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
+        $this->app->instance('soql-client', new Client);
     }
 
     protected function getPackageProviders($app)

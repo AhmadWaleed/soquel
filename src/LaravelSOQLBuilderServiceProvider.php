@@ -1,9 +1,10 @@
 <?php
 
-namespace AhmedWaleed\LaravelSOQLBuilder;
+namespace AhmadWaleed\LaravelSOQLBuilder;
 
 use Illuminate\Support\ServiceProvider;
-use AhmedWaleed\LaravelSOQLBuilder\Commands\MakeObjectCommand;
+use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
+use AhmadWaleed\LaravelSOQLBuilder\Commands\MakeObjectCommand;
 
 class LaravelSOQLBuilderServiceProvider extends ServiceProvider
 {
@@ -23,5 +24,8 @@ class LaravelSOQLBuilderServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-soql-builder.php', 'laravel-soql-builder');
+
+        $this->app->bind(QueryableInterface::class, fn () => new SOQLClient(app('forrest')));
+        $this->app->alias(QueryableInterface::class, 'soql-client');
     }
 }

@@ -6,11 +6,7 @@ use Illuminate\Contracts\Support\Arrayable;
 
 interface ObjectInterface extends Arrayable
 {
-    public static function sobject(): string;
+    public static function object(): string;
 
-    public static function robject(): string;
-
-    public static function sofields(): array;
-
-    public static function rofields(): array;
+    public static function fields(): array;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace AhmedWaleed\LaravelSOQLBuilder\Commands;
+namespace AhmadWaleed\LaravelSOQLBuilder\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;

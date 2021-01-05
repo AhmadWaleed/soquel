@@ -295,7 +295,7 @@ class QueryBuilderTest extends TestCase
             ->with('account', 'attachments')
             ->toSOQL();
 
-        $expected = "SELECT Id, Account.Id, Account.Name, (SELECT Id, Name FROM Attachments__r) FROM Contact";
+        $expected = "SELECT Id, Account.Id, Account.Name, (SELECT Id, Name, Content__c FROM Attachments__r) FROM Contact";
 
         $this->assertSame($expected, $got);
     }

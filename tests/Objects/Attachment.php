@@ -10,6 +10,7 @@ class Attachment extends SalesForceObject
 {
     public string $id;
     public string $name;
+    public string $content;
 
     public function contact(): Relationship
     {
@@ -21,6 +22,7 @@ class Attachment extends SalesForceObject
         return [
             'Id' => $this->id,
             'Name' => $this->name,
+            'Content__c' => $this->content,
         ];
     }
 
@@ -34,6 +36,7 @@ class Attachment extends SalesForceObject
         return [
             'Id',
             'Name',
+            'Content__c',
         ];
     }
 
@@ -43,6 +46,7 @@ class Attachment extends SalesForceObject
 
         $self->id = $object['Id'];
         $self->name = $object['Name'];
+        $self->content = $object['Content__c'];
 
         return $self;
     }

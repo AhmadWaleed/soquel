@@ -3,17 +3,14 @@
 namespace AhmadWaleed\LaravelSOQLBuilder\Object;
 
 use Illuminate\Support\Str;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryBuilder;
 
 abstract class Relationship
 {
     protected string $type;
     protected string $relation;
-    protected SalesForceObject $object;
+    protected BaseObject $object;
 
     abstract public function rfields(): array;
-
-    abstract public function build(): QueryBuilder;
 
     public function __construct(string $object, string $type = 'standard', ?string $relation = null)
     {
@@ -46,7 +43,7 @@ abstract class Relationship
         return $this->relation;
     }
 
-    public function object(): SalesForceObject
+    public function object(): BaseObject
     {
         return $this->object;
     }

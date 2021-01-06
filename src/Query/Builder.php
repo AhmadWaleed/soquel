@@ -2,28 +2,17 @@
 
 namespace AhmadWaleed\LaravelSOQLBuilder\Query;
 
-use Illuminate\Support\Collection;
-use AhmadWaleed\LaravelSOQLBuilder\Object\Relationship;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
-use AhmadWaleed\LaravelSOQLBuilder\Object\SalesForceObject;
-
-class QueryBuilder
+class Builder
 {
     protected array $fields = [];
     protected array $orders = [];
     protected string $limit = '';
     protected ?string $from = null;
     protected array $conditions = [];
-    protected QueryableInterface $client;
-    protected SalesForceObject $object;
 
-    public function __construct(SalesForceObject $object, QueryableInterface $client)
+    public function object(string $object): self
     {
-        $this->object = $object;
-        $this->client = $client;
-        $this->from = $object::object();
-        $this->fields = $object::fields();
+        return $this->from($object);
     }
 
     public function select(string ...$fields): self
@@ -33,46 +22,14 @@ class QueryBuilder
         return $this;
     }
 
-    public function with(string ...$relations): self
-    {
-        foreach ($relations as $relation) {
-            $this->addRelation($relation);
-        }
-
-        return $this;
-    }
-
-    private function addRelation(string $relation): SalesForceObject
-    {
-        if (! method_exists($this->object, $relation)) {
-            throw new \Exception($relation.' does not exist on '.get_class($this->object));
-        }
-
-        $relationship = $this->object->{$relation}();
-
-        if (! $relationship instanceof Relationship) {
-            throw new \UnexpectedValueException('Relationship method must return instance of '.Relationship::class);
-        }
-
-        if ($relationship instanceof ParentRelation) {
-            $this->addSelect($relationship->build()->fields);
-        }
-
-        if ($relationship instanceof ChildRelation) {
-            $this->addSubSelect($relationship->build());
-        }
-
-        return $relationship->object();
-    }
-
-    public function addSubSelect(QueryBuilder $builder): self
+    public function selectSub(Builder $builder): self
     {
         $this->fields = array_merge($this->fields, ['('.$builder->toSOQL().')']);
 
         return $this;
     }
 
-    public function addSelect(array $fields): self
+    public function addSelect(string ...$fields): self
     {
         $this->fields = array_merge($this->fields, $fields);
 
@@ -88,11 +45,6 @@ class QueryBuilder
         $this->orders[] = "{$field} {$order}";
 
         return $this;
-    }
-
-    public function find(string $id): SalesForceObject
-    {
-        return $this->where('Id', '=', $id)->first();
     }
 
     public function whereNull(string $field, string $boolean = 'AND'): self
@@ -137,7 +89,7 @@ class QueryBuilder
 
         $this->normalizeWhereClause($boolean);
 
-        if ($value instanceof QueryBuilder) {
+        if ($value instanceof Builder) {
             $condition = $value->toSOQL();
         } else {
             $condition = collect($value)
@@ -188,25 +140,11 @@ class QueryBuilder
         $orderBy = implode(' ', $this->orders);
         $where = implode(' ', $this->conditions);
 
-        $query = collect(['SELECT', $fields, 'FROM', $this->from, $orderBy, $where, $this->limit])
+        $query = collect(['SELECT', $fields, 'FROM', $this->from, $where, $orderBy, $this->limit])
             ->filter()
             ->implode(' ');
 
         return trim($query);
-    }
-
-    /** @return Collection|SalesForceObject[] */
-    public function get(): Collection
-    {
-        return collect($this->client->query($this->toSOQL()))
-            ->map(fn (array $object) => $this->object::create($object));
-    }
-
-    public function first(): SalesForceObject
-    {
-        $this->limit(1);
-
-        return $this->object::create($this->client->query($this->toSOQL())[0]);
     }
 
     private function normalizeWhereClause(string $boolean): void

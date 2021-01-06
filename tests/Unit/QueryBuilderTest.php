@@ -2,66 +2,67 @@
 
 namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Unit;
 
+use AhmadWaleed\LaravelSOQLBuilder\SOQL;
+use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
 use AhmadWaleed\LaravelSOQLBuilder\Tests\TestCase;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryBuilder;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Fakes\Client;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Objects\Account;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Objects\Contact;
 
 class QueryBuilderTest extends TestCase
 {
     /** @test */
     public function it_select_all_fields_from_object()
     {
-        $got = Account::newQuery()->toSOQL();
+        $soql = SOQL::object('Account')->select('Id', 'Name')->toSOQL();
 
-        $this->assertSame('SELECT Id, Name FROM Account', $got);
+        $this->assertSame('SELECT Id, Name FROM Account', $soql);
     }
 
     /** @test */
     public function it_only_select_single_fields()
     {
-        $builder = Account::newQuery()->select('Id');
+        $soql = SOQL::object('Account')->select('Id')->toSOQL();
 
-        $this->assertSame('SELECT Id FROM Account', $builder->toSOQL());
+        $this->assertSame('SELECT Id FROM Account', $soql);
     }
 
     /** @test */
     public function it_only_select_multiple_fields()
     {
-        $builder = Account::newQuery()->select('Id', 'Name');
+        $soql = SOQL::object('Account')->select('Id', 'Name')->toSOQL();
 
-        $this->assertSame('SELECT Id, Name FROM Account', $builder->toSOQL());
+        $this->assertSame('SELECT Id, Name FROM Account', $soql);
     }
 
     /** @test */
     public function it_add_more_fields_to_select()
     {
-        $builder = Account::newQuery()->addSelect(['Email']);
+        $soql = SOQL::object('Account')->select('Id', 'Name')->addSelect('Email')->toSOQL();
 
-        $this->assertSame('SELECT Id, Name, Email FROM Account', $builder->toSOQL());
+        $this->assertSame('SELECT Id, Name, Email FROM Account', $soql);
     }
 
     /** @test */
     public function it_applies_order_by_clause()
     {
-        $builder = Account::newQuery()->orderBy('Name');
+        $soql = SOQL::object('Account')->select('Id', 'Name')->orderBy('Name')->toSOQL();
 
-        $this->assertSame('SELECT Id, Name FROM Account ORDER BY Name DESC', $builder->toSOQL());
+        $this->assertSame('SELECT Id, Name FROM Account ORDER BY Name DESC', $soql);
     }
 
     /** @test */
     public function it_applies_order_by_clause_with_asc_order()
     {
-        $builder = Account::newQuery()->orderBy('Name', 'ASC');
+        $soql = SOQL::object('Account')
+            ->select('Id', 'Name')
+            ->orderBy('Name', 'ASC')
+            ->toSOQL();
 
-        $this->assertSame('SELECT Id, Name FROM Account ORDER BY Name ASC', $builder->toSOQL());
+        $this->assertSame('SELECT Id, Name FROM Account ORDER BY Name ASC', $soql);
     }
 
     /** @test */
     public function it_applies_multiple_order_by_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->orderBy('Id')
             ->orderBy('Name', 'ASC')
@@ -75,7 +76,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_where_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->where('Name', '=', 'John')
             ->toSOQL();
@@ -88,7 +89,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_multiple_where_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->where('Name', '=', 'John')
             ->where('Id', '=', 'aAr3x')
@@ -102,7 +103,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_multiple_where_clause_with_explicit_condition()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->where('Name', '=', 'John')
             ->where('Name', '=', 'Doe', 'OR')
@@ -116,7 +117,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_multiple_or_where_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->where('Name', '=', 'John')
             ->orWhere('Name', '=', 'Doe')
@@ -130,7 +131,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_where_in_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereIn('Id', ['abc', 'efg'])
             ->toSOQL();
@@ -143,8 +144,8 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_where_in_clause_with_sub_query()
     {
-        $got = Account::newQuery()->select('Id')
-            ->whereIn('Contact.Id', Contact::newQuery()->select('Id'))
+        $got = SOQL::object('Account')->select('Id')
+            ->whereIn('Contact.Id', SOQL::object('Contact')->select('Id'))
             ->toSOQL();
 
         $expected = "SELECT Id FROM Account WHERE Contact.Id IN (SELECT Id FROM Contact)";
@@ -155,7 +156,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_where_raw_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereRaw(
                 "DISTANCE(Contact__r.Geolocation__c, GEOLOCATION(15.623,35.949), 'km') < 1000"
@@ -170,7 +171,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_where_null_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereNull('Fax')
             ->toSOQL();
@@ -183,7 +184,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_multiple_where_null_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereNull('Fax')
             ->whereNull('Company')
@@ -197,7 +198,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_where_not_null_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereNotNull('Fax')
             ->toSOQL();
@@ -210,7 +211,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_multiple_where_not_null_clause()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereNotNull('Fax')
             ->whereNotNull('Company')
@@ -224,7 +225,7 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_add_limit_to_query()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
             ->whereNotNull('Fax')
             ->limit(2)
@@ -238,9 +239,9 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_applies_query_when_condition_meets()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
-            ->when(true, fn (QueryBuilder $builder) => $builder->where('Name', '=', 'John'))
+            ->when(true, fn (Builder $builder) => $builder->where('Name', '=', 'John'))
             ->toSOQL();
 
         $expected = "SELECT Id FROM Account WHERE Name = 'John'";
@@ -251,97 +252,13 @@ class QueryBuilderTest extends TestCase
     /** @test */
     public function it_will_no_apply_query_if_condition_is_not_true()
     {
-        $got = Account::newQuery()
+        $got = SOQL::object('Account')
             ->select('Id')
-            ->when(false, fn (QueryBuilder $builder) => $builder->where('Name', '=', 'John'))
+            ->when(false, fn (Builder $builder) => $builder->where('Name', '=', 'John'))
             ->toSOQL();
 
         $expected = "SELECT Id FROM Account";
 
         $this->assertSame($expected, $got);
-    }
-
-    /** @test */
-    public function it_loads_child_relationship()
-    {
-        $got = Account::newQuery()
-            ->select('Id')
-            ->with('contacts')
-            ->toSOQL();
-
-        $expected = "SELECT Id, (SELECT Id, Name FROM Contact) FROM Account";
-
-        $this->assertSame($expected, $got);
-    }
-
-    /** @test */
-    public function it_loads_parent_relationship()
-    {
-        $got = Contact::newQuery()
-            ->select('Id')
-            ->with('account')
-            ->toSOQL();
-
-        $expected = "SELECT Id, Account.Id, Account.Name FROM Contact";
-
-        $this->assertSame($expected, $got);
-    }
-
-    /** @test */
-    public function it_loads_parent_and_child_relationship()
-    {
-        $got = Contact::newQuery()
-            ->select('Id')
-            ->with('account', 'attachments')
-            ->toSOQL();
-
-        $expected = "SELECT Id, Account.Id, Account.Name, (SELECT Id, Name, Content__c FROM Attachments__r) FROM Contact";
-
-        $this->assertSame($expected, $got);
-    }
-
-    /** @test */
-    public function it_gets_query_records()
-    {
-        $client = new Client($this->testResponse());
-
-        $this->app->instance('soql-client', $client);
-
-        $objects = $builder = Contact::newQuery()
-            ->select('Id')
-            ->get();
-
-        $this->assertCount(2, $objects);
-        foreach ($objects as $object) {
-            $this->assertInstanceOf(Contact::class, $object);
-        }
-    }
-
-    /** @test */
-    public function it_gets_first_record()
-    {
-        $client = new Client($this->testResponse());
-
-        $this->app->instance('soql-client', $client);
-
-        $object = $builder = Contact::newQuery()
-            ->select('Id')
-            ->first();
-
-        $this->assertInstanceOf(Contact::class, $object);
-    }
-
-    private function testResponse(): array
-    {
-        return [
-            [
-                'Id' => 'av2t',
-                'Name' => 'John Doe',
-            ],
-            [
-                'Id' => 'avf7gt',
-                'Name' => 'Michael Pit',
-            ],
-        ];
     }
 }

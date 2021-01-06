@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\SalesForceObject;
+use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
 
 class {{ class }} extends SalesForceObject
 {
@@ -30,7 +30,7 @@ class {{ class }} extends SalesForceObject
         ];
     }
 
-    public static function create(array $object): SalesForceObject
+    public static function create(array $object): BaseObject
     {
         $object = new self();
 

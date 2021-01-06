@@ -58,7 +58,10 @@
         "laravel": {
             "providers": [
               "LaravelSOQLBuilderServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "SOQL": "AhmadWaleed\\LaravelSOQLBuilder\\SOQL"
+            }
         }
     },
     "minimum-stability": "dev",

@@ -2,8 +2,7 @@
 
 namespace AhmadWaleed\LaravelSOQLBuilder\Object;
 
-use Illuminate\Support\Str;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryBuilder;
+use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
 
 class ChildRelation extends Relationship
 {
@@ -12,7 +11,7 @@ class ChildRelation extends Relationship
         return $this->object::fields();
     }
 
-    public function build(): QueryBuilder
+    public function build(): Builder
     {
         return $this->object::newQuery()->select(...$this->rfields())->from($this->relation());
     }

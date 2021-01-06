@@ -2,12 +2,12 @@
 
 namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
 
+use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
 use AhmadWaleed\LaravelSOQLBuilder\Object\Relationship;
 use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
 use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
-use AhmadWaleed\LaravelSOQLBuilder\Object\SalesForceObject;
 
-class Contact extends SalesForceObject
+class Contact extends BaseObject
 {
     public string $id;
     public string $name;
@@ -43,7 +43,7 @@ class Contact extends SalesForceObject
         ];
     }
 
-    public static function create(array $object): SalesForceObject
+    public static function create(array $object): BaseObject
     {
         $self = new static();
 

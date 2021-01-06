@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) :vendor_name <:author_email>
+Copyright (c) Ahmad Waleed <ahmed_waleed1@hotmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

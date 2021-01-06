@@ -1,15 +1,11 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+namespace AhmadWaleed\LaravelSOQLBuilder\Object;
 
 use Illuminate\Support\Collection;
 use AhmadWaleed\LaravelSOQLBuilder\SOQL;
 use Illuminate\Support\Traits\ForwardsCalls;
 use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\Relationship;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
 use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
 
 /** @mixin \AhmadWaleed\LaravelSOQLBuilder\Query\Builder */

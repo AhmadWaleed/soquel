@@ -65,7 +65,7 @@ class ObjectBuilder
     /** @return Collection|BaseObject[] */
     public function get(): Collection
     {
-        return collect($this->client->query($this->query->toSOQL()))
+        return collect($this->client->query($this->toSOQL()))
             ->map(fn (array $object) => $this->object::create($object));
     }
 

@@ -165,6 +165,91 @@ The Object class extends Laravel's base Illuminate\Support\Collection class, whi
 $accounts = Account::query()->whereNotNull('Email')->get();
 $accounts = $accounts->reject(fn (Account $account) => $account->isActive);
 ```
+
+### Relationships
+Salesforce's objects are often related to one another. For example, a Account may have many Contacts, or an Contact could be related to the Account. SOQL ORM makes managing and working with these relationships easy, and supports parent and child relationships:
+
+* Defining Relationships
+  
+Relationships are defined as methods on your Object classes. Since relationships also serve as powerful query builders, defining relationships as methods provides powerful method chaining and querying capabilities. For example, we may chain additional query constraints on this contacts relationship:
+
+```php
+$account->contacts()->where('Name', 'LIKE', '%john%');
+```
+But, before diving too deep into using relationships, let's learn how to define each type of relationship.
+
+* Child To Parent
+
+A child-to-parent relationship is a very basic type of salesforce relationship. For example, a Contact object might be associated with one Account object. To define this relationship, we will place a account method on the Contact object. The account method should call the parentRelation method and return its result. The parentRelation method is available to your model via the object AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject base class:
+
+```php
+<?php
+
+namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+
+use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
+use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
+
+class Contact extends BaseObject
+{
+    public Account $account;
+    
+    public function account(): ParentRelation
+    {
+        return $this->parentRelation(Account::class);
+    }
+}
+```
+The first argument passed to the parentRelation method is the name of the related object class. Once the relationship is defined, we may retrieve the related record with following query:
+```php
+$account = Contact::new()->query()->with('account')->find('id')->account;
+```
+
+Additionally, you can pass object type and relationship name in second and third argument to parentRelation method;
+```php
+return $this->parentRelation(Job::class, 'Job__c');
+```
+For custom objects orm assumes relationship name, For example for custom object Job__c the relationship name will be Job__r, But if you want to override the default convention you can pass relationship name as third argument.
+```php
+return $this->parentRelation(Job::class, 'Job__c', 'jobs');
+```
+
+* Parent To Child
+  
+A parent-to relationship is used to define relationships where a single object is the parent to one or more child objects. For example, a account may have an infinite number of contacts. Like all other Salesforce relationships, parent-to-child relationships are defined by defining a method on your Object class:
+
+```php
+<?php
+
+namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+
+use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
+use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
+use Illuminate\Support\Collection;
+
+class Account extends BaseObject
+{
+    public Collection $contacts;
+    
+    public function contacts(): ChildRelation
+    {
+        return $this->childRelation(Contact::class);
+    }
+}
+```
+The first argument passed to the childRelation method is the name of the related object class. Once the relationship is defined, we may retrieve the related records with following query:
+```php
+$contacts = Account::new()->query()->with('contacts')->find('id')->contacts;
+```
+
+Additionally, you can pass object type and relationship name in second and third argument to childRelation method;
+```php
+return $this->childRelation(Attachment::class, 'Attachment__c');
+```
+For custom objects orm assumes relationship name, For example for custom object Attachment__c the relationship name will be Attachment__r, But if you want to override the default convention you can pass relationship name as third argument.
+```php
+return $this->childRelation(Attachment::class, 'Attachment__c', 'attachments');
+```
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

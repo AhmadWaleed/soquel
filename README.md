@@ -216,7 +216,7 @@ return $this->parentRelation(Job::class, 'Job__c', 'jobs');
 
 ### Parent To Child
   
-A parent-to relationship is used to define relationships where a single object is the parent to one or more child objects. For example, a account may have an infinite number of contacts. Like all other Salesforce relationships, parent-to-child relationships are defined by defining a method on your Object class:
+A parent-to-child relationship is used to define relationships where a single object is the parent to one or more child objects. For example, a account may have an infinite number of contacts. Like all other Salesforce relationships, parent-to-child relationships are defined by defining a method on your Object class:
 
 ```php
 <?php

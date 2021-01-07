@@ -2,17 +2,13 @@
 
 namespace AhmadWaleed\LaravelSOQLBuilder\Object;
 
-use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
-
-class ChildRelation extends Relationship
+/** @mixin ObjectBuilder */
+class ChildRelation extends Relation
 {
-    public function rfields(): array
+    public function __construct(BaseObject $object, ObjectBuilder $builder, string $type = 'standard', ?string $relationship = null)
     {
-        return $this->object::fields();
-    }
+        parent::__construct($object, $builder, $type, $relationship);
 
-    public function build(): Builder
-    {
-        return $this->object::newQuery()->select(...$this->rfields())->from($this->relation());
+        $this->builder->object($this->robject())->select(...$this->rfields());
     }
 }

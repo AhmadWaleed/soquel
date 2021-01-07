@@ -3,7 +3,6 @@
 namespace AhmadWaleed\LaravelSOQLBuilder\Object;
 
 use Illuminate\Support\Collection;
-use AhmadWaleed\LaravelSOQLBuilder\SOQL;
 use Illuminate\Support\Traits\ForwardsCalls;
 use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
 use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
@@ -29,11 +28,24 @@ class ObjectBuilder
     {
         $this->relations = array_merge($this->relations, $relations);
 
-        foreach ($relations as $relation) {
-            $this->selectRelation($relation);
+        return $this;
+    }
+
+    public function toSOQL(): string
+    {
+        foreach ($this->relations as $relation) {
+            if (! method_exists($this->object, $relation)) {
+                throw new \Exception($relation.' does not exist on '.get_class($this));
+            }
+
+            $relationship = $this->object->{$relation}();
+
+            if ($relationship instanceof ChildRelation) {
+                $this->query->selectSub($relationship->getBuilder()->getQuery());
+            }
         }
 
-        return $this;
+        return $this->query->toSOQL();
     }
 
     public function find(string $id): BaseObject
@@ -57,29 +69,9 @@ class ObjectBuilder
             ->map(fn (array $object) => $this->object::create($object));
     }
 
-    private function selectRelation(string $relation): self
+    public function getQuery(): Builder
     {
-        if (! method_exists($this->object, $relation)) {
-            throw new \Exception($relation.' does not exist on '.get_class($this));
-        }
-
-        $relationship = $this->object->{$relation}();
-
-        if (! $relationship instanceof Relationship) {
-            throw new \UnexpectedValueException('Relationship method must return instance of '.Relationship::class);
-        }
-
-        if ($relationship instanceof ParentRelation) {
-            $this->query->addSelect(...$relationship->rfields());
-        }
-
-        if ($relationship instanceof ChildRelation) {
-            $this->query->selectSub(
-                SOQL::object($relationship->relation())->select(...$relationship->rfields())
-            );
-        }
-
-        return $this;
+        return $this->query;
     }
 
     /** @return mixed */
@@ -92,5 +84,10 @@ class ObjectBuilder
         }
 
         return $this;
+    }
+
+    public function getObject(): BaseObject
+    {
+        return $this->object;
     }
 }

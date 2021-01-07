@@ -62,6 +62,109 @@ SOQL::object('Account')->select('Id')->orderBy('Name', 'ACS')->toSOQL();
 SOQL::object('Account')->select('Id')->limit(1)->toSOQL();
 ```
 
+# ORM Usage
+Query Builder is good when you want full control over query, but it becomes cumbersome with a query where you need to select all the fields of an object or want to load child pr parent object rows.
+This package also provide object-relational-mapper (ORM) support that makes it easy and enjoyable to interact with soql.
+
+### Generate Object Classes
+To get started, lets create an Object class which by default lives in `app/Objects` directory and extend the `AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject` class, but you can change the default directory in the configuration file. You may use the `make:object` artisan command to generate a new object class:
+```bash
+php artisan make:object Account
+```
+
+This artisan command by default generate standard object class but if you would like to generate a custom object class you may use the `--custom` or `-c` option:
+```bash
+php artisan make:object Job --custom
+```
+
+The above command will generate following class:
+```php
+<?php
+
+namespace App\Objects;
+
+use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
+
+class Account extends BaseObject
+{
+    public string $id;
+    public string $name;
+
+    /**
+     * Returns object fields names mapped with values
+     */
+    public function toArray(): array
+    {
+        return [
+            'Id' => $this->id,
+            'Name' => $this->name,
+        ];
+    }
+
+    /**
+     * Returns object name
+     */
+    public static function object(): string
+    {
+        return 'Account';
+    }
+    
+    /**
+     * Returns object fields
+     */
+    public static function fields(): array
+    {
+        return [
+            'Id',
+            'Name',
+        ];
+    }
+
+    /**
+     * Create object class from salesforce response
+     */
+    public static function create(array $object): BaseObject
+    {
+        $self = new self();
+
+        $self->id = $object['Id'];
+        $self->name = $object['Name'];
+
+        return $self;
+    }
+}
+
+```
+
+### Retrieving Objects
+Once you have created an object, you are ready to start retrieving data from salesforce, You can think of each object class as a powerful query builder allowing you to fluently query salesforce object data.
+The get method will retrieve all (limited to 2000 by salesforce) of the records from the associated object.
+```php
+use App\Objects\Account;
+
+foreach(Account::query()->get() as $account) {
+    echo $account->name;
+}
+```
+
+### Building Queries
+
+Each Object class serves as query builder you add additional constraints to queries and invoke the get method to retrieve the results:
+```php
+$accounts = Account::query()
+                ->where('name', 'LIKE', '%john%')
+                ->limit(10)
+                ->get();
+```
+
+### Collections
+As we have seen, Object method like get retrieve multiple records from the database. However, these methods don't return a plain PHP array. Instead, an instance of Illuminate\Database\Eloquent\Collection is returned.
+
+The Eloquent Collection class extends Laravel's base Illuminate\Support\Collection class, which provides a variety of helpful methods for interacting with data collections. For example, the reject method may be used to remove objects from a collection based on the results of an invoked closure
+```php
+$accounts = Account::query()->whereNotNull('Email')->get();
+$accounts = $accounts->reject(fn (Account $account) => $account->isActive);
+```
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

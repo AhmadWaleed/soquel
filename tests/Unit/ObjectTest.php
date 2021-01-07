@@ -12,7 +12,7 @@ class ObjectTest extends TestCase
     /** @test */
     public function it_query_objects()
     {
-        $got = Account::query()
+        $got = Account::new()->query()
             ->select('Id', 'Name')
             ->where('Name', 'LIKE', '%John%')
             ->orderBy('Id')
@@ -24,9 +24,9 @@ class ObjectTest extends TestCase
     }
 
     /** @test */
-    public function it_loads_parent_relationship()
+    public function it_eager_load_parent_relationship()
     {
-        $got = Contact::query()
+        $got = Contact::new()->query()
             ->with('account')
             ->toSOQL();
 
@@ -36,9 +36,21 @@ class ObjectTest extends TestCase
     }
 
     /** @test */
-    public function it_loads_child_relationship()
+    public function it_applies_()
     {
-        $got = Account::query()
+        $got = Contact::new()->query()
+            ->with('account')
+            ->toSOQL();
+
+        $expected = "SELECT Id, Name, Account.Id, Account.Name FROM Contact";
+
+        $this->assertSame($expected, $got);
+    }
+
+    /** @test */
+    public function it_eager_load_child_relationship()
+    {
+        $got = Account::new()->query()
             ->select('Id')
             ->with('contacts')
             ->toSOQL();
@@ -49,9 +61,9 @@ class ObjectTest extends TestCase
     }
 
     /** @test */
-    public function it_loads_parent_and_child_relationship()
+    public function it_eager_loads_parent_and_child_relationship()
     {
-        $got = Contact::query()
+        $got = Contact::new()->query()
             ->with('account', 'attachments')
             ->toSOQL();
 
@@ -67,7 +79,7 @@ class ObjectTest extends TestCase
 
         $this->app->instance('soql-client', $client);
 
-        $objects = Contact::query()
+        $objects = Contact::new()->query()
             ->select('Id')
             ->get();
 
@@ -84,7 +96,8 @@ class ObjectTest extends TestCase
 
         $this->app->instance('soql-client', $client);
 
-        $object = $builder = Contact::query()
+        $object = $builder = Contact::new()
+            ->query()
             ->select('Id')
             ->first();
 

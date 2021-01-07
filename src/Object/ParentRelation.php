@@ -2,12 +2,13 @@
 
 namespace AhmadWaleed\LaravelSOQLBuilder\Object;
 
-class ParentRelation extends Relationship
+/** @mixin ObjectBuilder */
+class ParentRelation extends Relation
 {
-    public function rfields(): array
+    public function __construct(BaseObject $object, ObjectBuilder $builder, string $type = 'standard', ?string $relationship = null)
     {
-        return collect($this->object::fields())
-            ->map(fn (string $field) => "{$this->relation()}.{$field}")
-            ->toArray();
+        parent::__construct($object, $builder, $type, $relationship);
+
+        $this->builder->addSelect(...$this->rfields());
     }
 }

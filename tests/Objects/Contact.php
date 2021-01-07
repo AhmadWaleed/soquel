@@ -3,23 +3,24 @@
 namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
 
 use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\Relationship;
 use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
+use AhmadWaleed\LaravelSOQLBuilder\Object\ObjectBuilder;
 use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
 
+/** @mixin ObjectBuilder */
 class Contact extends BaseObject
 {
     public string $id;
     public string $name;
 
-    public function account(): Relationship
+    public function account(): ParentRelation
     {
-        return new ParentRelation(Account::class);
+        return $this->parentRelation(Account::class);
     }
 
-    public function attachments(): Relationship
+    public function attachments(): ChildRelation
     {
-        return new ChildRelation(Attachment::class, 'custom', 'Attachments__r');
+        return $this->childRelation(Attachment::class, 'custom', 'Attachments__r');
     }
 
     public function toArray(): array

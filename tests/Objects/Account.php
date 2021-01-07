@@ -3,7 +3,6 @@
 namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
 
 use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\Relationship;
 use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
 
 class Account extends BaseObject
@@ -11,11 +10,14 @@ class Account extends BaseObject
     public string $id;
     public string $name;
 
-    public function contacts(): Relationship
+    public function contacts(): ChildRelation
     {
-        return new ChildRelation(Contact::class);
+        return $this->childRelation(Contact::class);
     }
 
+    /**
+     * Returns object fields names mapped with values
+     */
     public function toArray(): array
     {
         return [
@@ -24,11 +26,17 @@ class Account extends BaseObject
         ];
     }
 
+    /**
+     * Returns object name
+     */
     public static function object(): string
     {
         return 'Account';
     }
 
+    /**
+     * Returns object fields
+     */
     public static function fields(): array
     {
         return [
@@ -37,6 +45,9 @@ class Account extends BaseObject
         ];
     }
 
+    /**
+     * Create object class from salesforce response
+     */
     public static function create(array $object): BaseObject
     {
         $self = new self();

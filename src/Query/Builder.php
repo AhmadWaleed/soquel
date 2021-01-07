@@ -10,6 +10,11 @@ class Builder
     protected ?string $from = null;
     protected array $conditions = [];
 
+    protected array $keywords = [
+        'from' => 'FROM',
+        'select' => 'SELECT',
+    ];
+
     public function object(string $object): self
     {
         return $this->from($object);
@@ -140,7 +145,7 @@ class Builder
         $orderBy = implode(' ', $this->orders);
         $where = implode(' ', $this->conditions);
 
-        $query = collect(['SELECT', $fields, 'FROM', $this->from, $where, $orderBy, $this->limit])
+        $query = collect([$this->keywords['select'], $fields, $this->keywords['from'], $this->from, $where, $orderBy, $this->limit])
             ->filter()
             ->implode(' ');
 

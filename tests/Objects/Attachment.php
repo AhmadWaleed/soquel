@@ -3,7 +3,6 @@
 namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
 
 use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\Relationship;
 use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
 
 class Attachment extends BaseObject
@@ -12,9 +11,9 @@ class Attachment extends BaseObject
     public string $name;
     public string $content;
 
-    public function contact(): Relationship
+    public function contact(): ParentRelation
     {
-        return new ParentRelation(Contact::class);
+        return $this->parentRelation(Contact::class);
     }
 
     public function toArray(): array

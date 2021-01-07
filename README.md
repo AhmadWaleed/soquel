@@ -169,7 +169,7 @@ $accounts = $accounts->reject(fn (Account $account) => $account->isActive);
 ### Relationships
 Salesforce's objects are often related to one another. For example, a Account may have many Contacts, or an Contact could be related to the Account. SOQL ORM makes managing and working with these relationships easy, and supports parent and child relationships:
 
-* Defining Relationships
+### Defining Relationships
   
 Relationships are defined as methods on your Object classes. Since relationships also serve as powerful query builders, defining relationships as methods provides powerful method chaining and querying capabilities. For example, we may chain additional query constraints on this contacts relationship:
 

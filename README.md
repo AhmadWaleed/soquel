@@ -178,7 +178,7 @@ $account->contacts()->where('Name', 'LIKE', '%john%');
 ```
 But, before diving too deep into using relationships, let's learn how to define each type of relationship.
 
-* Child To Parent
+### Child To Parent
 
 A child-to-parent relationship is a very basic type of salesforce relationship. For example, a Contact object might be associated with one Account object. To define this relationship, we will place a account method on the Contact object. The account method should call the parentRelation method and return its result. The parentRelation method is available to your model via the object AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject base class:
 
@@ -214,7 +214,7 @@ For custom objects orm assumes relationship name, For example for custom object 
 return $this->parentRelation(Job::class, 'Job__c', 'jobs');
 ```
 
-* Parent To Child
+### Parent To Child
   
 A parent-to relationship is used to define relationships where a single object is the parent to one or more child objects. For example, a account may have an infinite number of contacts. Like all other Salesforce relationships, parent-to-child relationships are defined by defining a method on your Object class:
 

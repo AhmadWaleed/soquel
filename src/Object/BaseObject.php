@@ -18,7 +18,7 @@ abstract class BaseObject implements ObjectInterface
 
     public function __construct()
     {
-        $this->client = config('soquel.client') ?: app('soql-client');
+        $this->client = config('soquel.client');
         $this->builder = $this->newQuery();
     }
 

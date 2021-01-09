@@ -12,11 +12,35 @@ Laravel SOQL query builder provides a convenient, fluent interface to creating [
 
 > This Package uses [omniphx/forrest](https://github.com/omniphx/forrest) package as salesforce client to fetch records from salesforce, please refer to package github page for installation and configuration guide.
 
-## Requirements
+## Installation
 You can install the package via composer:
 
 ```bash
 composer require ahmedwaleed/laravel-soql-builder
+```
+
+Optionally, you can publish the config file of the package.
+
+```php
+php artisan vendor:publish --provider="AhmadWaleed\Soquel\SoquelServiceProvider"
+```
+This is the content of the config file that will be published at config/soquel.php
+```php
+<?php
+
+return [
+    // Here you can specify the app directory path where all object classes lives.
+    'app_path' => 'Objects',
+
+    /**
+    * Here you can specify Salesforce client to fetch query results, the default client is AhmadWaleed\Soquel\SOQLClient::class,
+    * this package uses omniphx/forrest @see https://github.com/omniphx/forrest package as salesforce client to fetch
+    * records from salesforce, please refer to package github page for installation and configuration guide.
+    * If you want to use your own client implementation please make sure you implement AhmadWaleed\Soquel\QueryableInterface.
+    * example: client => new CustomClient()
+    */
+    'client' => new \AhmadWaleed\Soquel\SOQLClient(app('soql-client')),
+];
 ```
 
 ## Basic Usage
@@ -63,18 +87,21 @@ SOQL::object('Account')->select('Id')->limit(1)->toSOQL();
 ```
 
 # ORM Usage
-Query Builder is good when you want full control over query, but it becomes cumbersome with a query where you need to select all the fields of an object or want to load child pr parent object rows.
-This package also provide object-relational-mapper (ORM) support that makes it easy and enjoyable to interact with soql.
+Query Builder is good when you want full control over query, but it becomes cumbersome with a query where you need to 
+select all the fields of an object or want to load child pr parent object rows. This package also provide 
+object-relational-mapper (ORM) support that makes it easy and enjoyable to interact with soql.
 
 ### Generate Object Classes
-To get started, lets create an Object class which by default lives in `app/Objects` directory and extend the `AhmadWaleed\Soquel\Object\BaseObject` class, but you can change the default directory in the configuration file. You may use the `make:object` artisan command to generate a new object class:
+To get started, lets create an Object class which by default lives in `app/Objects` directory and extend 
+the `AhmadWaleed\Soquel\Object\BaseObject` class, but you can change the default directory in the configuration file. 
+You may use the `make:object` artisan command to generate a new object class:
 ```bash
 php artisan make:object Account
 ```
 
-This artisan command by default generate standard object class but if you would like to generate a custom object class you may use the `--custom` or `-c` option:
+This artisan command by default generate standard object class but if you would like to generate a custom object class you may use the `--type` or `-t` option:
 ```bash
-php artisan make:object Job --custom
+php artisan make:object Job --type=custom
 ```
 
 The above command will generate following class:
@@ -137,8 +164,9 @@ class Account extends BaseObject
 ```
 
 ### Retrieving Objects
-Once you have created an object, you are ready to start retrieving data from salesforce, You can think of each object class as a powerful query builder allowing you to fluently query salesforce object data.
-The get method will retrieve all (limited to 2000 by salesforce) of the records from the associated object.
+Once you have created an object, you are ready to start retrieving data from salesforce, You can think of each 
+object class as a powerful query builder allowing you to fluently query salesforce object data. The get method will 
+retrieve all (limited to 2000 by salesforce) of the records from the associated object.
 ```php
 use App\Objects\Account;
 
@@ -149,7 +177,8 @@ foreach(Account::query()->get() as $account) {
 
 ### Building Queries
 
-Each Object class serves as query builder you add additional constraints to queries and invoke the get method to retrieve the results:
+Each Object class serves as query builder you add additional constraints to queries and invoke the get method to 
+retrieve the results:
 ```php
 $accounts = Account::query()
                 ->where('name', 'LIKE', '%john%')
@@ -158,20 +187,27 @@ $accounts = Account::query()
 ```
 
 ### Collections
-As we have seen, Object method like get retrieve multiple records from the database. However, these methods don't return a plain PHP array. Instead, an instance of Illuminate\Database\Eloquent\Collection is returned.
+As we have seen, Object method like get retrieve multiple records from the salesforce. However, these methods don't 
+return a plain PHP array. Instead, an instance of Illuminate\Database\Eloquent\Collection is returned.
 
-The Object class extends Laravel's base Illuminate\Support\Collection class, which provides a variety of helpful methods for interacting with data collections. For example, the reject method may be used to remove objects from a collection based on the results of an invoked closure
+The Object class extends Laravel's base Illuminate\Support\Collection class, which provides a variety of helpful methods
+for interacting with data collections. For example, the reject method may be used to remove objects from a collection 
+based on the results of an invoked closure
 ```php
 $accounts = Account::query()->whereNotNull('Email')->get();
 $accounts = $accounts->reject(fn (Account $account) => $account->isActive);
 ```
 
 ### Relationships
-Salesforce's objects are often related to one another. For example, a Account may have many Contacts, or an Contact could be related to the Account. SOQL ORM makes managing and working with these relationships easy, and supports parent and child relationships:
+Salesforce's objects are often related to one another. For example, a Account may have many Contacts, or an Contact 
+could be related to the Account. SOQL ORM makes managing and working with these relationships easy, and supports parent 
+and child relationships:
 
 ### Defining Relationships
   
-Relationships are defined as methods on your Object classes. Since relationships also serve as powerful query builders, defining relationships as methods provides powerful method chaining and querying capabilities. For example, we may chain additional query constraints on this contacts relationship:
+Relationships are defined as methods on your Object classes. Since relationships also serve as powerful query builders, 
+defining relationships as methods provides powerful method chaining and querying capabilities. For example, we may chain
+additional query constraints on this contacts relationship:
 
 ```php
 $account->contacts()->where('Name', 'LIKE', '%john%');
@@ -200,7 +236,8 @@ class Contact extends BaseObject
     }
 }
 ```
-The first argument passed to the parentRelation method is the name of the related object class. Once the relationship is defined, we may retrieve the related record with following query:
+The first argument passed to the parentRelation method is the name of the related object class. Once the relationship 
+is defined, we may retrieve the related record with following query:
 ```php
 $account = Contact::new()->query()->with('account')->find('id')->account;
 ```
@@ -209,14 +246,17 @@ Additionally, you can pass object type and relationship name in second and third
 ```php
 return $this->parentRelation(Job::class, 'Job__c');
 ```
-For custom objects orm assumes relationship name, For example for custom object Job__c the relationship name will be Job__r, But if you want to override the default convention you can pass relationship name as third argument.
+For custom objects orm assumes relationship name, For example for custom object Job__c the relationship name will be 
+Job__r, But if you want to override the default convention you can pass relationship name as third argument.
 ```php
 return $this->parentRelation(Job::class, 'Job__c', 'jobs');
 ```
 
 ### Parent To Child
   
-A parent-to-child relationship is used to define relationships where a single object is the parent to one or more child objects. For example, a account may have an infinite number of contacts. Like all other Salesforce relationships, parent-to-child relationships are defined by defining a method on your Object class:
+A parent-to-child relationship is used to define relationships where a single object is the parent to one or more child 
+objects. For example, a account may have an infinite number of contacts. Like all other Salesforce relationships, 
+parent-to-child relationships are defined by defining a method on your Object class:
 
 ```php
 <?php
@@ -237,7 +277,8 @@ class Account extends BaseObject
     }
 }
 ```
-The first argument passed to the childRelation method is the name of the related object class. Once the relationship is defined, we may retrieve the related records with following query:
+The first argument passed to the childRelation method is the name of the related object class. Once the relationship is 
+defined, we may retrieve the related records with following query:
 ```php
 $contacts = Account::new()->query()->with('contacts')->find('id')->contacts;
 ```
@@ -246,7 +287,8 @@ Additionally, you can pass object type and relationship name in second and third
 ```php
 return $this->childRelation(Attachment::class, 'Attachment__c');
 ```
-For custom objects orm assumes relationship name, For example for custom object Attachment__c the relationship name will be Attachment__r, But if you want to override the default convention you can pass relationship name as third argument.
+For custom objects orm assumes relationship name, For example for custom object Attachment__c the relationship name will
+be Attachment__r, But if you want to override the default convention you can pass relationship name as third argument.
 ```php
 return $this->childRelation(Attachment::class, 'Attachment__c', 'attachments');
 ```

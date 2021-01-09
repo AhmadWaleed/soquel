@@ -12,7 +12,7 @@ class SoquelServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/laravel-soql-builder.php' => config_path('laravel-soql-builder.php'),
+                __DIR__ . '/../config/soquel.php' => config_path('soquel.php'),
             ], 'config');
 
             $this->commands([
@@ -23,7 +23,7 @@ class SoquelServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-soql-builder.php', 'laravel-soql-builder');
+        $this->mergeConfigFrom(__DIR__ . '/../config/soquel.php', 'soquel');
 
         $this->app->bind(QueryableInterface::class, fn () => new SOQLClient(app('forrest')));
         $this->app->alias(QueryableInterface::class, 'soql-client');

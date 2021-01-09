@@ -30,7 +30,7 @@ class MakeObjectCommand extends GeneratorCommand
 
     protected function getStub(): string
     {
-        return $this->option('standard')
+        return $this->option('type') === 'standard'
             ? $this->resolveStubPath('/stubs/standard-object.stub')
             : $this->resolveStubPath('/stubs/custom-object.stub');
     }
@@ -45,10 +45,13 @@ class MakeObjectCommand extends GeneratorCommand
 
     /**
      * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
      */
-    protected function getDefaultNamespace(string $rootNamespace): string
+    protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Objects';
+        return $rootNamespace.'\\'.config('soquel.app_path', 'Objects');
     }
 
     /**
@@ -59,8 +62,7 @@ class MakeObjectCommand extends GeneratorCommand
     protected function getOptions(): array
     {
         return [
-            ['standard', 's', InputOption::VALUE_OPTIONAL, 'The salesforce standard object'],
-            ['custom', 'c', InputOption::VALUE_OPTIONAL, 'The salesforce custom object'],
+            ['type', 't', InputOption::VALUE_OPTIONAL, 'The salesforce object types: (custom, standard)'],
         ];
     }
 }

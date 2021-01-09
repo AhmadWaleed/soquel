@@ -43,11 +43,6 @@ abstract class BaseObject implements ObjectInterface
         return $this->builder;
     }
 
-    public function getNamespace(): string
-    {
-        return config('laravel-soql-builder.default_namespace');
-    }
-
     /** @return mixed */
     public function __call(string $method, array $parameters)
     {

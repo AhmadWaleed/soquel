@@ -4,11 +4,14 @@ namespace {{ namespace }};
 
 use AhmadWaleed\Soquel\Object\BaseObject;
 
-class {{ class }} extends SalesForceObject
+class {{ class }} extends BaseObject
 {
     public string $id;
     public string $name;
 
+    /**
+     * Returns object fields names mapped with values
+    */
     public function toArray(): array
     {
         return [
@@ -17,11 +20,17 @@ class {{ class }} extends SalesForceObject
         ];
     }
 
+    /**
+     * Returns object name
+    */
     public static function object(): string
     {
-        return {{ class }}__c;
+        return '{{ class }}__c';
     }
 
+    /**
+     * Returns object fields
+    */
     public static function fields(): array
     {
         return [
@@ -30,13 +39,16 @@ class {{ class }} extends SalesForceObject
         ];
     }
 
+    /**
+     * Create object class from salesforce response
+    */
     public static function create(array $object): BaseObject
     {
-        $object = new self();
+        $self = new self();
 
-        $object->id = $object['Id'];
-        $object->name = $object['Name'];
+        $self->id = $object['Id'];
+        $self->name = $object['Name'];
 
-        return $object;
+        return $self;
     }
 }

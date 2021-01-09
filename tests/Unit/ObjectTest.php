@@ -36,18 +36,6 @@ class ObjectTest extends TestCase
     }
 
     /** @test */
-    public function it_applies_()
-    {
-        $got = Contact::new()->query()
-            ->with('account')
-            ->toSOQL();
-
-        $expected = "SELECT Id, Name, Account.Id, Account.Name FROM Contact";
-
-        $this->assertSame($expected, $got);
-    }
-
-    /** @test */
     public function it_eager_load_child_relationship()
     {
         $got = Account::new()->query()
@@ -56,6 +44,26 @@ class ObjectTest extends TestCase
             ->toSOQL();
 
         $expected = "SELECT Id, (SELECT Id, Name FROM Contact) FROM Account";
+
+        $this->assertSame($expected, $got);
+    }
+
+    /** @test */
+    public function it_applies_query_constraints_on_parent_relationship()
+    {
+        $got = Contact::new()->account()->whereNotNull('Account.Email')->toSOQL();
+
+        $expected = "SELECT Id, Name, Account.Id, Account.Name FROM Contact WHERE Account.Email != null";
+
+        $this->assertSame($expected, $got);
+    }
+
+    /** @test */
+    public function it_applies_query_constraints_on_child_relationship()
+    {
+        $got = Account::new()->contacts()->whereNotNull('Email')->toSOQL();
+
+        $expected = "SELECT Id, Name FROM Contact WHERE Email != null";
 
         $this->assertSame($expected, $got);
     }

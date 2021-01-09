@@ -16,7 +16,7 @@ Laravel SOQL query builder provides a convenient, fluent interface to creating [
 You can install the package via composer:
 
 ```bash
-composer require ahmedwaleed/laravel-soql-builder
+composer require ahmedwaleed/soquel
 ```
 
 Optionally, you can publish the config file of the package.

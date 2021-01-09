@@ -9,8 +9,7 @@ return [
     * records from salesforce,  please refer to package github page for installation and configuration guide.
     * If you want to use your own client implementation please make sure you implement AhmadWaleed\Soquel\QueryableInterface
     * and register it in your AppServiceProvider register method.
-    * $this->app->bind(QueryableInterface::class, fn () => new CustomClient);
-    * $this->app->alias(QueryableInterface::class, 'soql-client');
+    * example: client => new CustomClient()
     */
     'client' => null,
 ];

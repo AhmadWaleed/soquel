@@ -39,8 +39,9 @@ return [
     * If you want to use your own client implementation please make sure you implement AhmadWaleed\Soquel\QueryableInterface.
     * example: client => new CustomClient()
     */
-    'client' => new \AhmadWaleed\Soquel\SOQLClient(app('soql-client')),
+    'client' => new \AhmadWaleed\Soquel\SOQLClient,
 ];
+
 ```
 
 ## Basic Usage

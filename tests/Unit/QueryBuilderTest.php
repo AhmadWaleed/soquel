@@ -1,10 +1,10 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Unit;
+namespace AhmadWaleed\Soquel\Tests\Unit;
 
-use AhmadWaleed\LaravelSOQLBuilder\SOQL;
-use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\TestCase;
+use AhmadWaleed\Soquel\SOQL;
+use AhmadWaleed\Soquel\Query\Builder;
+use AhmadWaleed\Soquel\Tests\TestCase;
 
 class QueryBuilderTest extends TestCase
 {

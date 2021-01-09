@@ -1,6 +1,6 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Object;
+namespace AhmadWaleed\Soquel\Object;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;

@@ -1,10 +1,10 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Object;
+namespace AhmadWaleed\Soquel\Object;
 
+use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Traits\ForwardsCalls;
-use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Query\QueryableInterface;
 
 abstract class BaseObject implements ObjectInterface
 {

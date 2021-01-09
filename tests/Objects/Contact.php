@@ -1,11 +1,11 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+namespace AhmadWaleed\Soquel\Tests\Objects;
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ObjectBuilder;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
+use AhmadWaleed\Soquel\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\ChildRelation;
+use AhmadWaleed\Soquel\Object\ObjectBuilder;
+use AhmadWaleed\Soquel\Object\ParentRelation;
 
 /** @mixin ObjectBuilder */
 class Contact extends BaseObject

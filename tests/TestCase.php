@@ -1,10 +1,10 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests;
+namespace AhmadWaleed\Soquel\Tests;
 
+use AhmadWaleed\Soquel\Tests\Fakes\Client;
+use AhmadWaleed\Soquel\SoquelServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Fakes\Client;
-use AhmadWaleed\LaravelSOQLBuilder\LaravelSOQLBuilderServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -18,7 +18,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            LaravelSOQLBuilderServiceProvider::class,
+            SoquelServiceProvider::class,
         ];
     }
 

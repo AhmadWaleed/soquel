@@ -1,6 +1,6 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Object;
+namespace AhmadWaleed\Soquel\Object;
 
 trait HasRelationship
 {

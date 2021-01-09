@@ -1,8 +1,8 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Fakes;
+namespace AhmadWaleed\Soquel\Tests\Fakes;
 
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Query\QueryableInterface;
 
 class Client implements QueryableInterface
 {

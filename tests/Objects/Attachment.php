@@ -1,9 +1,9 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+namespace AhmadWaleed\Soquel\Tests\Objects;
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
+use AhmadWaleed\Soquel\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\ParentRelation;
 
 class Attachment extends BaseObject
 {

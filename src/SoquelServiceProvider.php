@@ -1,12 +1,12 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder;
+namespace AhmadWaleed\Soquel;
 
 use Illuminate\Support\ServiceProvider;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
-use AhmadWaleed\LaravelSOQLBuilder\Commands\MakeObjectCommand;
+use AhmadWaleed\Soquel\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Commands\MakeObjectCommand;
 
-class LaravelSOQLBuilderServiceProvider extends ServiceProvider
+class SoquelServiceProvider extends ServiceProvider
 {
     public function boot()
     {

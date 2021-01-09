@@ -23,7 +23,7 @@ composer require ahmedwaleed/laravel-soql-builder
 
 * Retrieving All Rows From A Object
 ```php
-use AhmadWaleed\LaravelSOQLBuilder\SOQL;
+use AhmadWaleed\Soquel\SOQL;
 
 echo SOQL::object('Account')->select('Id', 'Name')->toSOQL();
 
@@ -67,7 +67,7 @@ Query Builder is good when you want full control over query, but it becomes cumb
 This package also provide object-relational-mapper (ORM) support that makes it easy and enjoyable to interact with soql.
 
 ### Generate Object Classes
-To get started, lets create an Object class which by default lives in `app/Objects` directory and extend the `AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject` class, but you can change the default directory in the configuration file. You may use the `make:object` artisan command to generate a new object class:
+To get started, lets create an Object class which by default lives in `app/Objects` directory and extend the `AhmadWaleed\Soquel\Object\BaseObject` class, but you can change the default directory in the configuration file. You may use the `make:object` artisan command to generate a new object class:
 ```bash
 php artisan make:object Account
 ```
@@ -83,7 +83,7 @@ The above command will generate following class:
 
 namespace App\Objects;
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\BaseObject;
 
 class Account extends BaseObject
 {
@@ -180,15 +180,15 @@ But, before diving too deep into using relationships, let's learn how to define 
 
 ### Child To Parent
 
-A child-to-parent relationship is a very basic type of salesforce relationship. For example, a Contact object might be associated with one Account object. To define this relationship, we will place a account method on the Contact object. The account method should call the parentRelation method and return its result. The parentRelation method is available to your model via the object AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject base class:
+A child-to-parent relationship is a very basic type of salesforce relationship. For example, a Contact object might be associated with one Account object. To define this relationship, we will place a account method on the Contact object. The account method should call the parentRelation method and return its result. The parentRelation method is available to your model via the object AhmadWaleed\Soquel\Object\BaseObject base class:
 
 ```php
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+namespace AhmadWaleed\Soquel\Tests\Objects;
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ParentRelation;
+use AhmadWaleed\Soquel\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\ParentRelation;
 
 class Contact extends BaseObject
 {
@@ -221,10 +221,10 @@ A parent-to-child relationship is used to define relationships where a single ob
 ```php
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+namespace AhmadWaleed\Soquel\Tests\Objects;
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
+use AhmadWaleed\Soquel\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\ChildRelation;
 use Illuminate\Support\Collection;
 
 class Account extends BaseObject

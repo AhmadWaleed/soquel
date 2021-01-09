@@ -1,5 +1,5 @@
 {
-    "name": "ahmedwaleed/laravel-soql-builder",
+    "name": "ahmedwaleed/soquel",
     "description": "An ORM solution for Salesforce Object Query Language (SOQL)",
     "keywords": [
         "AhmadWaleed",
@@ -9,7 +9,7 @@
         "salesforce object query language",
         "orm"
     ],
-    "homepage": "https://github.com/AhmadWaleed/laravel-soql-builder",
+    "homepage": "https://github.com/AhmadWaleed/soquel",
     "license": "MIT",
     "authors": [
         {
@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "laravel/framework": "^8.0",
+        "illuminate/support": "^8.21",
         "omniphx/forrest": "^2.11"
     },
     "require-dev": {
@@ -31,13 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AhmadWaleed\\LaravelSOQLBuilder\\": "src",
-            "AhmadWaleed\\LaravelSOQLBuilder\\Database\\Factories\\": "database/factories"
+            "AhmadWaleed\\Soquel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AhmadWaleed\\LaravelSOQLBuilder\\Tests\\": "tests"
+            "AhmadWaleed\\Soquel\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -57,10 +56,10 @@
     "extra": {
         "laravel": {
             "providers": [
-              "LaravelSOQLBuilderServiceProvider"
+                "AhmadWaleed\\Soquel\\SoquelServiceProvider"
             ],
             "aliases": {
-                "SOQL": "AhmadWaleed\\LaravelSOQLBuilder\\SOQL"
+                "SOQL": "AhmadWaleed\\Soquel\\SOQL"
             }
         }
     },

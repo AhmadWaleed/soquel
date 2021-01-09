@@ -1,13 +1,13 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Object;
+namespace AhmadWaleed\Soquel\Object;
 
 use Illuminate\Support\Collection;
+use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Traits\ForwardsCalls;
-use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Query\QueryableInterface;
 
-/** @mixin \AhmadWaleed\LaravelSOQLBuilder\Query\Builder */
+/** @mixin \AhmadWaleed\Soquel\Query\Builder */
 class ObjectBuilder
 {
     use ForwardsCalls;

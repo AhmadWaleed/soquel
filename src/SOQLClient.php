@@ -1,9 +1,9 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder;
+namespace AhmadWaleed\Soquel;
 
 use Omniphx\Forrest\Client;
-use AhmadWaleed\LaravelSOQLBuilder\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Query\QueryableInterface;
 
 class SOQLClient implements QueryableInterface
 {

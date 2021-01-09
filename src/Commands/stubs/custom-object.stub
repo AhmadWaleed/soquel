@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\BaseObject;
 
 class {{ class }} extends SalesForceObject
 {

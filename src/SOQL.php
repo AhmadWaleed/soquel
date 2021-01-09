@@ -1,13 +1,13 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder;
+namespace AhmadWaleed\Soquel;
 
+use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Facades\Facade;
-use AhmadWaleed\LaravelSOQLBuilder\Query\Builder;
 
 /**
- * @method static \AhmadWaleed\LaravelSOQLBuilder\Query\Builder object(string $object)
- * @see \AhmadWaleed\LaravelSOQLBuilder\Query\Builder
+ * @method static \AhmadWaleed\Soquel\Query\Builder object(string $object)
+ * @see \AhmadWaleed\Soquel\Query\Builder
  */
 class SOQL extends Facade
 {

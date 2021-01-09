@@ -1,11 +1,11 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Unit;
+namespace AhmadWaleed\Soquel\Tests\Unit;
 
-use AhmadWaleed\LaravelSOQLBuilder\Tests\TestCase;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Fakes\Client;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Objects\Account;
-use AhmadWaleed\LaravelSOQLBuilder\Tests\Objects\Contact;
+use AhmadWaleed\Soquel\Tests\TestCase;
+use AhmadWaleed\Soquel\Tests\Fakes\Client;
+use AhmadWaleed\Soquel\Tests\Objects\Account;
+use AhmadWaleed\Soquel\Tests\Objects\Contact;
 
 class ObjectTest extends TestCase
 {

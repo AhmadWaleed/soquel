@@ -1,6 +1,6 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Query;
+namespace AhmadWaleed\Soquel\Query;
 
 class Builder
 {

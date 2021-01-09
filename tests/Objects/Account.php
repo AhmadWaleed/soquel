@@ -1,9 +1,9 @@
 <?php
 
-namespace AhmadWaleed\LaravelSOQLBuilder\Tests\Objects;
+namespace AhmadWaleed\Soquel\Tests\Objects;
 
-use AhmadWaleed\LaravelSOQLBuilder\Object\BaseObject;
-use AhmadWaleed\LaravelSOQLBuilder\Object\ChildRelation;
+use AhmadWaleed\Soquel\Object\BaseObject;
+use AhmadWaleed\Soquel\Object\ChildRelation;
 
 class Account extends BaseObject
 {

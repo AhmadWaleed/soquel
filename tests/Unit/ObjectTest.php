@@ -13,7 +13,6 @@ class ObjectTest extends TestCase
     public function it_query_objects()
     {
         $got = Account::new()->query()
-            ->select('Id', 'Name')
             ->where('Name', 'LIKE', '%John%')
             ->orderBy('Id')
             ->toSOQL();
@@ -75,7 +74,7 @@ class ObjectTest extends TestCase
             ->with('account', 'attachments')
             ->toSOQL();
 
-        $expected = "SELECT Id, Name, Account.Id, Account.Name, (SELECT Id, Name, Content__c FROM Attachments__r) FROM Contact";
+        $expected = "SELECT Id, Name, Account.Id, Account.Name, (SELECT Id, Name, Contact__c FROM Attachments__r) FROM Contact";
 
         $this->assertSame($expected, $got);
     }
@@ -87,9 +86,7 @@ class ObjectTest extends TestCase
 
         $this->app->instance('soql-client', $client);
 
-        $objects = Contact::new()->query()
-            ->select('Id')
-            ->get();
+        $objects = Contact::new()->query()->get();
 
         $this->assertCount(2, $objects);
         foreach ($objects as $object) {
@@ -110,6 +107,16 @@ class ObjectTest extends TestCase
             ->first();
 
         $this->assertInstanceOf(Contact::class, $object);
+    }
+
+    /** @test */
+    public function it_set_attribute_on_object()
+    {
+        $account = new Account();
+        $account->Company = 'Acme';
+
+        $this->assertSame('Acme', $account->Company);
+        $this->assertSame(['Company' => 'Acme'], $account->getAttributes());
     }
 
     private function testResponse(): array

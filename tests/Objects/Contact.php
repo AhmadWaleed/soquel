@@ -10,8 +10,7 @@ use AhmadWaleed\Soquel\Object\ParentRelation;
 /** @mixin ObjectBuilder */
 class Contact extends BaseObject
 {
-    public string $id;
-    public string $name;
+    protected array $fields = ['Name'];
 
     public function account(): ParentRelation
     {
@@ -21,36 +20,5 @@ class Contact extends BaseObject
     public function attachments(): ChildRelation
     {
         return $this->childRelation(Attachment::class, 'custom', 'Attachments__r');
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'Id' => $this->id,
-            'Name' => $this->name,
-        ];
-    }
-
-    public static function object(): string
-    {
-        return 'Contact';
-    }
-
-    public static function fields(): array
-    {
-        return [
-            'Id',
-            'Name',
-        ];
-    }
-
-    public static function create(array $object): BaseObject
-    {
-        $self = new static();
-
-        $self->id = $object['Id'];
-        $self->name = $object['Name'];
-
-        return $self;
     }
 }

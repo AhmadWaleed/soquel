@@ -59,14 +59,14 @@ class ObjectBuilder
     {
         $this->query->limit(1);
 
-        return $this->object::create($this->get()->first()->toArray());
+        return $this->get()->first();
     }
 
     /** @return Collection|BaseObject[] */
     public function get(): Collection
     {
         return collect($this->client->query($this->toSOQL()))
-            ->map(fn (array $object) => $this->object::create($object));
+            ->map(fn (array $object) => $this->object->fill($object));
     }
 
     public function getQuery(): Builder

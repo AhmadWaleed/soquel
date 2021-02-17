@@ -10,7 +10,7 @@ abstract class Relation
     use ForwardsCalls;
 
     protected string $type;
-    protected BaseObject $object;
+    protected BaseObject $model;
     protected string $relationship;
     protected ObjectBuilder $builder;
 
@@ -21,14 +21,14 @@ abstract class Relation
         }
 
         $this->type = $type;
-        $this->object = $object;
+        $this->model = $object;
         $this->builder = $builder;
         $this->relationship = $relationship ?: $this->resolveRelationshipName();
     }
 
     public function resolveRelationshipName(): string
     {
-        $object = $this->object::object();
+        $object = $this->model->getSobject();
 
         if ($this->type === 'standard') {
             return $object;
@@ -43,18 +43,18 @@ abstract class Relation
 
     public function object(): BaseObject
     {
-        return $this->object;
+        return $this->model;
     }
 
     public function rfields(): array
     {
         if ($this instanceof ParentRelation) {
-            return collect($this->object::fields())
+            return collect($this->model->fields())
                 ->map(fn (string $field) => "{$this->robject()}.{$field}")
                 ->toArray();
         }
 
-        return $this->object::fields();
+        return $this->model->fields();
     }
 
     public function robject(): ?string

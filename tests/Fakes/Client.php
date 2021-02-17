@@ -17,4 +17,9 @@ class Client implements QueryableInterface
     {
         return $this->response;
     }
+
+    public function authenticate(): array
+    {
+        return [];
+    }
 }

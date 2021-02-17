@@ -100,7 +100,21 @@ You may use the `make:object` artisan command to generate a new object class:
 php artisan make:object Account
 ```
 
-This artisan command by default generate standard object class but if you would like to generate a custom object class you may use the `--type` or `-t` option:
+The above command will generate following class:
+```php
+<?php
+
+namespace App\Objects;
+
+use AhmadWaleed\Soquel\Object\BaseObject;
+
+class Account extends BaseObject
+{
+}
+
+```
+
+If you would like to generate a custom object class you may use the `--type` or `-t` option:
 ```bash
 php artisan make:object Job --type=custom
 ```
@@ -113,55 +127,24 @@ namespace App\Objects;
 
 use AhmadWaleed\Soquel\Object\BaseObject;
 
-class Account extends BaseObject
+class Job extends BaseObject
 {
-    public string $id;
-    public string $name;
-
-    /**
-     * Returns object fields names mapped with values
-     */
-    public function toArray(): array
-    {
-        return [
-            'Id' => $this->id,
-            'Name' => $this->name,
-        ];
-    }
-
-    /**
-     * Returns object name
-     */
-    public static function object(): string
-    {
-        return 'Account';
-    }
-    
-    /**
-     * Returns object fields
-     */
-    public static function fields(): array
-    {
-        return [
-            'Id',
-            'Name',
-        ];
-    }
-
-    /**
-     * Create object class from salesforce response
-     */
-    public static function create(array $object): BaseObject
-    {
-        $self = new self();
-
-        $self->id = $object['Id'];
-        $self->name = $object['Name'];
-
-        return $self;
-    }
+    protected string $sobject = 'Job__c';
 }
 
+```
+By default, the Id field of salesforce object will be retrieved, You can also define on the model what fields you want to bring back with each record.
+```php
+public array $fields = [
+    'Name',
+    'Email',
+];
+```
+
+By default, the Id filed is readonly, You can specify which fileds should be excluded while performing insert/update operation on model.
+
+```php
+protected array $readOnly = ['Name'];
 ```
 
 ### Retrieving Objects
@@ -293,6 +276,51 @@ be Attachment__r, But if you want to override the default convention you can pas
 ```php
 return $this->childRelation(Attachment::class, 'Attachment__c', 'attachments');
 ```
+
+### Inserting and Updating
+
+- Insert
+```php
+$contact = new Contact();
+$contact->LastName = 'doe';
+$contact->Email = 'john@example.com';
+$contact->save();
+
+// OR 
+
+$contact = Contact::create(['LastName' => 'doe', 'Email', 'john@example.com']);
+```
+
+- Insert Collection
+```php
+$contacts = collect([
+	new Contact(['Email' => 'email1@test.com']),
+	new Contact(['Email' => 'email2@test.com'])
+]);
+
+Contact::saveMany($contacts);
+
+// OR
+
+$contacts = collect([
+	['Email' => 'email1@test.com'],
+	['Email' => 'email2@test.com']
+]);
+
+Contact::saveMany($contacts);
+```
+
+- Update
+```php
+$contact = new Contact();
+$contact->LastName = 'michael';
+$contact->save();
+
+// OR 
+
+$contact = $contact->update(['LastName' => 'michael', 'Email', 'michael@example.com']);
+```
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

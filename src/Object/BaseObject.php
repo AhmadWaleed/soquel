@@ -22,11 +22,13 @@ abstract class BaseObject
     protected array $attributes = [];
     protected array $readOnly = ['Id'];
 
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
         $this->client = config('soquel.client');
         $this->sobject = class_basename(get_class($this));
         $this->builder = $this->newQuery();
+
+        $this->attributes = $attributes;
     }
 
     public static function new(?string $object = null): self

@@ -71,4 +71,14 @@ abstract class Relation
     {
         return $this->builder;
     }
+
+    public function getRelationship(): string
+    {
+        return $this->relationship;
+    }
+
+    public function getModel(): BaseObject
+    {
+        return $this->model;
+    }
 }

@@ -90,4 +90,9 @@ class ObjectBuilder
     {
         return $this->object;
     }
+
+    public function getRelations(): array
+    {
+        return $this->relations;
+    }
 }

@@ -109,6 +109,31 @@ abstract class BaseObject implements Arrayable
             }
         }
 
+        foreach ($this->builder->getRelations() as $name) {
+            /** @var Relation $relation */
+            $relation = $this->{$name}();
+
+            if (isset($attributes[$relation->getRelationship()])) {
+                $model = $relation->getModel();
+
+                if ($relation instanceof ParentRelation) {
+                    $model->fill($attributes[$relation->getRelationship()]);
+                    $this->setAttribute($name, $model);
+                }
+
+                if ($relation instanceof ChildRelation) {
+                    $models = collect($attributes[$relation->getRelationship()]['records'])
+                        ->map(function (array $item) use ($model) {
+                            $newModel = clone $model;
+
+                            return $newModel->fill($item);
+                        });
+
+                    $this->setAttribute($name, $models);
+                }
+            }
+        }
+
         return $this;
     }
 

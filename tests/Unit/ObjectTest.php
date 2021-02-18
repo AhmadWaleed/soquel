@@ -2,6 +2,7 @@
 
 namespace AhmadWaleed\Soquel\Tests\Unit;
 
+use Carbon\Carbon;
 use AhmadWaleed\Soquel\Tests\TestCase;
 use AhmadWaleed\Soquel\Tests\Fakes\Client;
 use AhmadWaleed\Soquel\Tests\Objects\Account;
@@ -84,7 +85,7 @@ class ObjectTest extends TestCase
     {
         $client = new Client($this->testResponse());
 
-        $this->app->instance('soql-client', $client);
+        config()->set('soquel.client', $client);
 
         $objects = Contact::new()->query()->get();
 
@@ -99,7 +100,7 @@ class ObjectTest extends TestCase
     {
         $client = new Client($this->testResponse());
 
-        $this->app->instance('soql-client', $client);
+        config()->set('soquel.client', $client);
 
         $object = $builder = Contact::new()
             ->query()
@@ -117,6 +118,16 @@ class ObjectTest extends TestCase
 
         $this->assertSame('Acme', $account->Company);
         $this->assertSame(['Company' => 'Acme'], $account->getAttributes());
+    }
+
+    /** @test */
+    public function it_get_attribute_via_accessor_method()
+    {
+        $account = new Account();
+        $account->CreatedAt = $now = now()->toDateString();
+
+        $this->assertInstanceOf(Carbon::class, $account->CreatedAt);
+        $this->assertSame($now, $account->getOriginal('CreatedAt'));
     }
 
     private function testResponse(): array

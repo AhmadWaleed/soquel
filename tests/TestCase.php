@@ -12,7 +12,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->app->instance('soql-client', new Client);
+        config()->set('soquel.client', new Client);
         $this->app->instance('forrest', new Client);
         $this->app->instance('encrypter', new class {
             public function decrypt($value, $unserialize = true)

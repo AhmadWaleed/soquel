@@ -7,7 +7,6 @@ use AhmadWaleed\Soquel\SOQLClient;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Traits\ForwardsCalls;
-use AhmadWaleed\Soquel\Query\QueryableInterface;
 use Omniphx\Forrest\Providers\Laravel\Facades\Forrest;
 
 abstract class BaseObject
@@ -15,7 +14,6 @@ abstract class BaseObject
     use HasRelationship, ForwardsCalls;
 
     protected ObjectBuilder $builder;
-    protected QueryableInterface $client;
     protected string $sobject;
     protected array $with = [];
     protected array $fields = [];
@@ -24,14 +22,12 @@ abstract class BaseObject
 
     public function __construct(array $attributes = [])
     {
-        $this->client = config('soquel.client');
         $this->sobject = class_basename(get_class($this));
-        $this->builder = $this->newQuery();
-
         $this->attributes = $attributes;
+        $this->builder = $this->newQuery();
     }
 
-    public static function new(?string $object = null): self
+    public static function new(): self
     {
         return new static();
     }
@@ -41,14 +37,14 @@ abstract class BaseObject
         return $this->builder;
     }
 
-    private function newQuery(): ObjectBuilder
+    public function newQuery(): ObjectBuilder
     {
         SOQLClient::authenticate();
 
-        $this->builder = new ObjectBuilder($this, new Builder, app('soql-client'));
+        $this->builder = new ObjectBuilder($this, new Builder, config('soquel.client'));
 
         $this->builder
-            ->object($this->sobject)
+            ->object($this->sobject())
             ->select(...$this->fields());
 
         return $this->builder;
@@ -67,7 +63,7 @@ abstract class BaseObject
         return $this;
     }
 
-    public function getSobject(): string
+    public function sobject(): string
     {
         return $this->sobject;
     }
@@ -77,7 +73,21 @@ abstract class BaseObject
         $this->setAttribute($field, $value);
     }
 
-    public function __get($field)
+    public function __get(string $field)
+    {
+        if (! isset($this->attributes[$field])) {
+            throw new \InvalidArgumentException("No such field {$field} exists.");
+        }
+
+        $accessor = 'get'.ucfirst($field).'Attribute';
+        if (method_exists($this, $accessor)) {
+            return $this->{$accessor}($this->attributes[$field]);
+        }
+
+        return $this->attributes[$field];
+    }
+
+    public function getOriginal(string $field)
     {
         if (! isset($this->attributes[$field])) {
             throw new \InvalidArgumentException("No such field {$field} exists.");

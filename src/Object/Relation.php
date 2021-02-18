@@ -28,7 +28,7 @@ abstract class Relation
 
     public function resolveRelationshipName(): string
     {
-        $object = $this->model->getSobject();
+        $object = $this->model->sobject();
 
         if ($this->type === 'standard') {
             return $object;

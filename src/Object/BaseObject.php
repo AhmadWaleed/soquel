@@ -109,30 +109,7 @@ abstract class BaseObject implements Arrayable
             }
         }
 
-        foreach ($this->builder->getRelations() as $name) {
-            /** @var Relation $relation */
-            $relation = $this->{$name}();
-
-            if (isset($attributes[$relation->getRelationship()])) {
-                $model = $relation->getModel();
-
-                if ($relation instanceof ParentRelation) {
-                    $model->fill($attributes[$relation->getRelationship()]);
-                    $this->setAttribute($name, $model);
-                }
-
-                if ($relation instanceof ChildRelation) {
-                    $models = collect($attributes[$relation->getRelationship()]['records'])
-                        ->map(function (array $item) use ($model) {
-                            $newModel = clone $model;
-
-                            return $newModel->fill($item);
-                        });
-
-                    $this->setAttribute($name, $models);
-                }
-            }
-        }
+        $this->setRelationAttributes($attributes);
 
         return $this;
     }
@@ -239,5 +216,36 @@ abstract class BaseObject implements Arrayable
     private function method(): string
     {
         return Arr::has($this->attributes, 'Id') ? 'patch' : 'post';
+    }
+
+    private function setRelationAttributes(array $attributes): void
+    {
+//        dd($attributes);
+        foreach ($this->builder->getRelations() as $name) {
+            /** @var Relation $relation */
+            $relation = $this->{$name}();
+
+            if (! isset($attributes[$relation->getRelationship()])) {
+                continue;
+            }
+
+            $model = $relation->getModel();
+
+            if ($relation instanceof ParentRelation) {
+                $model->fill($attributes[$relation->getRelationship()]);
+                $this->setAttribute($name, $model);
+            }
+
+            if ($relation instanceof ChildRelation) {
+                $models = collect($attributes[$relation->getRelationship()]['records'])
+                    ->map(function (array $item) use ($model) {
+                        $newModel = clone $model;
+
+                        return $newModel->fill($item);
+                    });
+
+                $this->setAttribute($name, $models);
+            }
+        }
     }
 }

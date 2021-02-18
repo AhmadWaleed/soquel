@@ -7,6 +7,7 @@ use AhmadWaleed\Soquel\Tests\TestCase;
 use AhmadWaleed\Soquel\Tests\Fakes\Client;
 use AhmadWaleed\Soquel\Tests\Objects\Account;
 use AhmadWaleed\Soquel\Tests\Objects\Contact;
+use AhmadWaleed\Soquel\Tests\Objects\Attachment;
 
 class ObjectTest extends TestCase
 {
@@ -130,6 +131,32 @@ class ObjectTest extends TestCase
         $this->assertSame($now, $account->getOriginal('CreatedAt'));
     }
 
+    /** @test */
+    public function it_set_parent_relational_attributes()
+    {
+        $client = new Client($this->testParentRelationResponse());
+        config()->set('soquel.client', $client);
+
+        $contacts = Contact::new()->query()->with('account')->get();
+
+        $this->assertCount(2, $contacts);
+        $this->assertSame(get_class($contacts->first()->account), Account::class);
+    }
+
+    /** @test */
+    public function it_set_child_relational_attributes()
+    {
+        $client = new Client($this->testChildRelationResponse());
+        config()->set('soquel.client', $client);
+
+        $contacts = Contact::new()->query()->with('attachments')->get();
+
+        $this->assertCount(1, $contacts);
+        $this->assertCount(2, $contacts->first()->attachments);
+        $this->assertSame(get_class($contacts->first()->attachments[0]), Attachment::class);
+        $this->assertSame(get_class($contacts->first()->attachments[1]), Attachment::class);
+    }
+
     private function testResponse(): array
     {
         return [
@@ -140,6 +167,46 @@ class ObjectTest extends TestCase
             [
                 'Id' => 'avf7gt',
                 'Name' => 'Michael Pit',
+            ],
+        ];
+    }
+
+    private function testParentRelationResponse(): array
+    {
+        return [
+            [
+                'Id' => 'av2t',
+                'Name' => 'John Doe',
+                'Account' => [
+                    'Id' => 'av2t',
+                    'Name' => 'Acme',
+                ],
+            ],
+            [
+                'Id' => 'av2t',
+                'Name' => 'Jane Doe',
+            ],
+        ];
+    }
+
+    private function testChildRelationResponse(): array
+    {
+        return [
+            [
+                'Id' => 'av2t',
+                'Name' => 'John Doe',
+                'Attachments__r' => [
+                    'records' => [
+                        [
+                            'Id' => 'av2t',
+                            'Contact__c' => 'dfs3kdn',
+                        ],
+                        [
+                            'Id' => 'av2t',
+                            'Contact__c' => 'dfs3kdn',
+                        ],
+                    ],
+                ],
             ],
         ];
     }

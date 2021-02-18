@@ -2,7 +2,7 @@
 
 namespace AhmadWaleed\Soquel\Query;
 
-interface QueryableInterface
+interface ClientInterface
 {
     public function query(string $soql): array;
 }

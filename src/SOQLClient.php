@@ -3,22 +3,29 @@
 namespace AhmadWaleed\Soquel;
 
 use Illuminate\Support\Facades\Cache;
-use AhmadWaleed\Soquel\Query\QueryableInterface;
-use Omniphx\Forrest\Providers\Laravel\Facades\Forrest;
+use AhmadWaleed\Soquel\Query\ClientInterface;
 
-class SOQLClient implements QueryableInterface
+class SOQLClient implements ClientInterface
 {
-    public function query(string $soql): array
+    /** @var \Omniphx\Forrest\Client */
+    protected $client;
+
+    public function __construct($client)
     {
-        return app('forrest')->query($soql)['records'];
+        $this->client = $client;
     }
 
-    public static function authenticate(): array
+    public function query(string $soql): array
+    {
+        return $this->client->query($soql)['records'];
+    }
+
+    public function authenticate(): array
     {
         config()->set('forrest.storage.type', 'cache');
 
         if (! Cache::has(config('forrest.storage.path') . 'token')) {
-            Forrest::authenticate();
+            $this->client->authenticate();
         }
 
         return decrypt(Cache::get(config('forrest.storage.path') . 'token'));

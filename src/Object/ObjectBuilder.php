@@ -5,7 +5,7 @@ namespace AhmadWaleed\Soquel\Object;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Traits\ForwardsCalls;
-use AhmadWaleed\Soquel\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Query\ClientInterface;
 
 /** @mixin \AhmadWaleed\Soquel\Query\Builder */
 class ObjectBuilder
@@ -15,9 +15,9 @@ class ObjectBuilder
     protected Builder $query;
     protected BaseObject $object;
     protected array $relations = [];
-    protected QueryableInterface $client;
+    protected ClientInterface $client;
 
-    public function __construct(BaseObject $object, Builder $query, QueryableInterface $client)
+    public function __construct(BaseObject $object, Builder $query, ClientInterface $client)
     {
         $this->object = $object;
         $this->query = $query;

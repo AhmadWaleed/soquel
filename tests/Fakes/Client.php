@@ -2,9 +2,9 @@
 
 namespace AhmadWaleed\Soquel\Tests\Fakes;
 
-use AhmadWaleed\Soquel\Query\QueryableInterface;
+use AhmadWaleed\Soquel\Query\ClientInterface;
 
-class Client implements QueryableInterface
+class Client implements ClientInterface
 {
     protected array $response;
 

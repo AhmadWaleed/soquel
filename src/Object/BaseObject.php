@@ -175,11 +175,9 @@ abstract class BaseObject implements Arrayable
     {
         SOQLClient::authenticate();
 
-        if (! property_exists($this, 'externalIdKey')) {
-            throw new \LogicException("No externalIdKey exists on object.");
-        }
-
-        $endpoint = $this->sobject.'/'.$this->externalIdKey.'/'.$this->attributes[$this->externalIdKey];
+        $endpoint = property_exists($this, 'externalIdKey')
+            ? $this->sobject().'/'.$this->externalIdKey.'/'.$this->attributes[$this->externalIdKey]
+            : $this->sobject().'/'.$this->attributes['Id'];
 
         try {
             $response = Forrest::sobjects($endpoint, [
@@ -210,7 +208,7 @@ abstract class BaseObject implements Arrayable
 
     private function endpoint(): string
     {
-        return Arr::has($this->attributes, 'Id') ? $this->sobject.'/'.$this->Id : $this->sobject;
+        return Arr::has($this->attributes, 'Id') ? $this->sobject().'/'.$this->Id : $this->sobject();
     }
 
     private function method(): string

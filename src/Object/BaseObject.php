@@ -6,10 +6,11 @@ use Illuminate\Support\Arr;
 use AhmadWaleed\Soquel\SOQLClient;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Traits\ForwardsCalls;
 use Omniphx\Forrest\Providers\Laravel\Facades\Forrest;
 
-abstract class BaseObject
+abstract class BaseObject implements Arrayable
 {
     use HasRelationship, ForwardsCalls;
 
@@ -200,6 +201,11 @@ abstract class BaseObject
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    public function toArray(): array
+    {
+        return $this->getAttributes();
     }
 
     private function endpoint(): string

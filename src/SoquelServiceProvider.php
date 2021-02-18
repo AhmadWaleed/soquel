@@ -28,7 +28,7 @@ class SoquelServiceProvider extends ServiceProvider
         $this->app->register(\Omniphx\Forrest\Providers\Laravel\ForrestServiceProvider::class);
 
         $this->app->bind(ClientInterface::class, function () {
-            return config('soquel.client', new SOQLClient(app('forrest')));
+            return config('soquel.client') ?: new SOQLClient(app('forrest'));
         });
         $this->app->alias(ClientInterface::class, 'soquel.client');
     }

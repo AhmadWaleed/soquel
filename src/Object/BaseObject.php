@@ -22,7 +22,6 @@ abstract class BaseObject
 
     public function __construct(array $attributes = [])
     {
-        $this->sobject = class_basename(get_class($this));
         $this->attributes = $attributes;
         $this->builder = $this->newQuery();
     }
@@ -65,7 +64,7 @@ abstract class BaseObject
 
     public function sobject(): string
     {
-        return $this->sobject;
+        return $this->sobject ?? class_basename(get_class($this));
     }
 
     public function __set($field, $value): void

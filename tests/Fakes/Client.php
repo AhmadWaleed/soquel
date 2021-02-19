@@ -2,9 +2,9 @@
 
 namespace AhmadWaleed\Soquel\Tests\Fakes;
 
-use AhmadWaleed\Soquel\Query\ClientInterface;
+use Omniphx\Forrest\Client as ForrestClient;
 
-class Client implements ClientInterface
+class Client extends ForrestClient
 {
     protected array $response;
 
@@ -13,7 +13,7 @@ class Client implements ClientInterface
         $this->response = $response;
     }
 
-    public function query(string $soql): array
+    public function query($query, $options = []): array
     {
         return $this->response;
     }
@@ -21,5 +21,15 @@ class Client implements ClientInterface
     public function authenticate(): array
     {
         return [];
+    }
+
+    public function refresh()
+    {
+        return true;
+    }
+
+    public function revoke()
+    {
+        return true;
     }
 }

@@ -2,10 +2,10 @@
 
 namespace AhmadWaleed\Soquel\Object;
 
+use Omniphx\Forrest\Client;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Traits\ForwardsCalls;
-use AhmadWaleed\Soquel\Query\ClientInterface;
 
 /** @mixin \AhmadWaleed\Soquel\Query\Builder */
 class ObjectBuilder
@@ -15,9 +15,9 @@ class ObjectBuilder
     protected Builder $query;
     protected BaseObject $object;
     protected array $relations = [];
-    protected ClientInterface $client;
+    protected Client $client;
 
-    public function __construct(BaseObject $object, Builder $query, ClientInterface $client)
+    public function __construct(BaseObject $object, Builder $query, Client $client)
     {
         $this->object = $object;
         $this->query = $query;

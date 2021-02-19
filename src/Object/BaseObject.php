@@ -3,6 +3,7 @@
 namespace AhmadWaleed\Soquel\Object;
 
 use Illuminate\Support\Arr;
+use AhmadWaleed\Soquel\Soquel;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Contracts\Support\Arrayable;
@@ -38,7 +39,7 @@ abstract class BaseObject implements Arrayable
 
     public function newQuery(): ObjectBuilder
     {
-        app('forrest')->authenticate();
+        Soquel::authenticate();
 
         $this->builder = new ObjectBuilder($this, new Builder, app('forrest'));
 
@@ -135,7 +136,7 @@ abstract class BaseObject implements Arrayable
 
     public function save(): BaseObject
     {
-        app('forrest')->authenticate();
+        Soquel::authenticate();
 
         try {
             $response = Forrest::sobjects($this->endpoint(), [
@@ -174,7 +175,7 @@ abstract class BaseObject implements Arrayable
 
     public function upsert(): BaseObject
     {
-        app('forrest')->authenticate();
+        Soquel::authenticate();
 
         $endpoint = property_exists($this, 'externalIdKey')
             ? $this->sobject().'/'.$this->externalIdKey.'/'.$this->attributes[$this->externalIdKey]

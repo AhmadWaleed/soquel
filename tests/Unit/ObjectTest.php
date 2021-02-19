@@ -158,13 +158,15 @@ class ObjectTest extends TestCase
     private function testResponse(): array
     {
         return [
-            [
-                'Id' => 'av2t',
-                'Name' => 'John Doe',
-            ],
-            [
-                'Id' => 'avf7gt',
-                'Name' => 'Michael Pit',
+            'records' => [
+                [
+                    'Id' => 'av2t',
+                    'Name' => 'John Doe',
+                ],
+                [
+                    'Id' => 'avf7gt',
+                    'Name' => 'Michael Pit',
+                ],
             ],
         ];
     }
@@ -172,17 +174,19 @@ class ObjectTest extends TestCase
     private function testParentRelationResponse(): array
     {
         return [
-            [
-                'Id' => 'av2t',
-                'Name' => 'John Doe',
-                'Account' => [
+            'records' => [
+                [
                     'Id' => 'av2t',
-                    'Name' => 'Acme',
+                    'Name' => 'John Doe',
+                    'Account' => [
+                        'Id' => 'av2t',
+                        'Name' => 'Acme',
+                    ],
                 ],
-            ],
-            [
-                'Id' => 'av2t',
-                'Name' => 'Jane Doe',
+                [
+                    'Id' => 'av2t',
+                    'Name' => 'Jane Doe',
+                ],
             ],
         ];
     }
@@ -190,8 +194,9 @@ class ObjectTest extends TestCase
     private function testChildRelationResponse(): array
     {
         return [
-            [
-                'Id' => 'av2t',
+            'records' => [
+                [
+                    'Id' => 'av2t',
                 'Name' => 'John Doe',
                 'Attachments__r' => [
                     'records' => [
@@ -204,6 +209,7 @@ class ObjectTest extends TestCase
                             'Contact__c' => 'dfs3kdn',
                         ],
                     ],
+                ],
                 ],
             ],
         ];

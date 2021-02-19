@@ -2,19 +2,19 @@
 
 namespace AhmadWaleed\Soquel;
 
-use Illuminate\Support\Facades\Cache;
 use Omniphx\Forrest\Providers\Laravel\Facades\Forrest;
 
 class Soquel
 {
     public static function authenticate(): array
     {
-        config()->set('forrest.storage.type', 'cache');
+        config()->set('soquel.forrest.authentication', 'UserPassword');
 
-        if (! Cache::has(config('forrest.storage.path') . 'token')) {
+        $storage = ucwords(config('soquel.forrest.storage.type'));
+        if (! $storage::has(config('soquel.forrest.storage.path') . 'token')) {
             Forrest::authenticate();
         }
 
-        return decrypt(Cache::get(config('forrest.storage.path') . 'token'));
+        return decrypt($storage::get(config('soquel.forrest.storage.path') . 'token'));
     }
 }

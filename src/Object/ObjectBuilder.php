@@ -65,7 +65,7 @@ class ObjectBuilder
     /** @return Collection|BaseObject[] */
     public function get(): Collection
     {
-        return collect($this->client->query($this->toSOQL()))
+        return collect($this->client->query($this->toSOQL())['records'])
             ->map(fn (array $object) => $this->object->fill($object));
     }
 

@@ -85,8 +85,7 @@ class ObjectTest extends TestCase
     public function it_gets_query_records()
     {
         $client = new Client($this->testResponse());
-
-        config()->set('soquel.client', $client);
+        $this->instance('forrest', $client);
 
         $objects = Contact::new()->query()->get();
 
@@ -100,8 +99,7 @@ class ObjectTest extends TestCase
     public function it_gets_first_record()
     {
         $client = new Client($this->testResponse());
-
-        config()->set('soquel.client', $client);
+        $this->instance('forrest', $client);
 
         $object = $builder = Contact::new()
             ->query()
@@ -135,7 +133,7 @@ class ObjectTest extends TestCase
     public function it_set_parent_relational_attributes()
     {
         $client = new Client($this->testParentRelationResponse());
-        config()->set('soquel.client', $client);
+        $this->instance('forrest', $client);
 
         $contacts = Contact::new()->query()->with('account')->get();
 
@@ -147,7 +145,7 @@ class ObjectTest extends TestCase
     public function it_set_child_relational_attributes()
     {
         $client = new Client($this->testChildRelationResponse());
-        config()->set('soquel.client', $client);
+        $this->instance('forrest', $client);
 
         $contacts = Contact::new()->query()->with('attachments')->get();
 

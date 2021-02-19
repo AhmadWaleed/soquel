@@ -2,7 +2,7 @@
 
 [![Laravel](https://img.shields.io/badge/Laravel-8.0-orange.svg?style=flat-square)](http://laravel.com)
 
-Laravel SOQL query builder provides a convenient, fluent interface to creating [SOQL](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql.htm) queries and fetching records from salesforce.
+Laravel SOQL query builder provides a convenient, fluent interface to creating, updating, [SOQL](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql.htm) queries and fetching records from salesforce.
 
 ## Requirements
 
@@ -24,27 +24,30 @@ Optionally, you can publish the config file of the package.
 ```php
 php artisan vendor:publish --provider="AhmadWaleed\Soquel\SoquelServiceProvider"
 ```
-This is the content of the config file that will be published at config/soquel.php
+Set following config with your salesforce credentials.
 ```php
-<?php
+'credentials' => [
+    // Required:
+    'consumerKey' => env('SF_CONSUMER_KEY'),
+    'consumerSecret' => env('SF_CONSUMER_SECRET'),
+    'callbackURI' => env('SF_CALLBACK_URI'),
+    'loginURL' => env('SF_LOGIN_URL'),
 
-return [
-    // Here you can specify the app directory path where all object classes lives.
-    'app_path' => 'Objects',
-
-    /**
-    * Here you can specify Salesforce client to fetch query results, the default client is AhmadWaleed\Soquel\SOQLClient::class,
-    * this package uses omniphx/forrest @see https://github.com/omniphx/forrest package as salesforce client to fetch
-    * records from salesforce, please refer to package github page for installation and configuration guide.
-    * If you want to use your own client implementation please make sure you implement AhmadWaleed\Soquel\QueryableInterface.
-    * example: client => new CustomClient()
-    */
-    'client' => new \AhmadWaleed\Soquel\SOQLClient,
-];
+    // Only required for UserPassword authentication:
+    'username' => env('SF_USERNAME'),
+    // Security token might need to be ammended to password unless IP Address is whitelisted
+    'password' => env('SF_PASSWORD'),
+]
 
 ```
 
+If you need to modify any more settings for Forrest, publish the config file using the artisan command:
+```bash
+php artisan vendor:publish
+```
 ## Basic Usage
+
+The content of config file will be published at `config/soquel.php`
 
 * Retrieving All Rows From A Object
 ```php

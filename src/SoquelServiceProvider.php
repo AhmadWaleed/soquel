@@ -3,7 +3,6 @@
 namespace AhmadWaleed\Soquel;
 
 use Illuminate\Support\ServiceProvider;
-use AhmadWaleed\Soquel\Query\ClientInterface;
 use AhmadWaleed\Soquel\Commands\MakeObjectCommand;
 
 class SoquelServiceProvider extends ServiceProvider
@@ -25,11 +24,10 @@ class SoquelServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/soquel.php', 'soquel');
 
-        $this->app->register(\Omniphx\Forrest\Providers\Laravel\ForrestServiceProvider::class);
+        config([
+            'forrest' => config('soquel.forrest'),
+        ]);
 
-        $this->app->bind(ClientInterface::class, function () {
-            return config('soquel.client') ?: new SOQLClient(app('forrest'));
-        });
-        $this->app->alias(ClientInterface::class, 'soquel.client');
+        $this->app->register(\Omniphx\Forrest\Providers\Laravel\ForrestServiceProvider::class);
     }
 }

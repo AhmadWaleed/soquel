@@ -19,10 +19,10 @@ You can install the package via composer:
 composer require ahmedwaleed/soquel
 ```
 
-Optionally, you can publish the config file of the package.
+Optionally, you can publish the config file of package.
 
 ```php
-php artisan vendor:publish --provider="AhmadWaleed\Soquel\SoquelServiceProvider"
+php artisan vendor:publish --provider="Omniphx\Forrest\Providers\Laravel\ForrestServiceProvider::class"
 ```
 Set following config with your salesforce credentials.
 ```php
@@ -39,12 +39,6 @@ Set following config with your salesforce credentials.
     'password' => env('SF_PASSWORD'),
 ]
 
-```
-
-If you need to modify any more settings for Forrest, publish the config file using the artisan command:
-```bash
-php artisan vendor:publish
-```
 ## Basic Usage
 
 The content of config file will be published at `config/soquel.php`

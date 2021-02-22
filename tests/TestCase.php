@@ -12,6 +12,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        $this->app->config['forrest.storage.type'] = 'cache';
         $this->app->instance('forrest', new Client);
         $this->app->instance('encrypter', new class {
             public function decrypt($value, $unserialize = true)

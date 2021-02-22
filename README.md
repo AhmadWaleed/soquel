@@ -38,6 +38,7 @@ Set following config with your salesforce credentials.
     // Security token might need to be ammended to password unless IP Address is whitelisted
     'password' => env('SF_PASSWORD'),
 ]
+```
 
 ## Basic Usage
 

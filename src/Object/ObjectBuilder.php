@@ -60,19 +60,19 @@ class ObjectBuilder
     {
         $this->query->limit(1);
 
-        return $this->get()->first();
+        $records = $this->get();
+
+        if ($records->isEmpty()) {
+            throw new NotFoundException;
+        }
+
+        return $records->first();
     }
 
     /** @return Collection|BaseObject[] */
     public function get(): Collection
     {
-        $records = $this->client->query($this->toSOQL())['records'];
-
-        if (! count($records)) {
-            throw new NotFoundException;
-        }
-
-        return collect($records)
+        return collect($this->client->query($this->toSOQL())['records'])
             ->map(fn (array $object) => $this->object->fill($object));
     }
 

@@ -60,13 +60,13 @@ class ObjectBuilder
     {
         $this->query->limit(1);
 
-        $recods = $this->get();
+        $records = $this->get();
 
-        if ($recods->isEmpty()) {
+        if ($records->isEmpty()) {
             throw new NotFoundException;
         }
 
-        return $recods->first();
+        return $records->first();
     }
 
     /** @return Collection|BaseObject[] */

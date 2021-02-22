@@ -2,11 +2,11 @@
 
 namespace AhmadWaleed\Soquel\Object;
 
-use AhmadWaleed\Soquel\Exceptions\NotFoundException;
 use Omniphx\Forrest\Client;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
 use Illuminate\Support\Traits\ForwardsCalls;
+use AhmadWaleed\Soquel\Exceptions\NotFoundException;
 
 /** @mixin \AhmadWaleed\Soquel\Query\Builder */
 class ObjectBuilder
@@ -68,7 +68,7 @@ class ObjectBuilder
     {
         $records = $this->client->query($this->toSOQL())['records'];
 
-        if (!count($records)) {
+        if (! count($records)) {
             throw new NotFoundException;
         }
 

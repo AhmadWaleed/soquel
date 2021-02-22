@@ -10,6 +10,10 @@ class SoquelServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/forrest.php' => config_path('forrest.php'),
+            ], 'config');
+
             $this->commands([
                 MakeObjectCommand::class,
             ]);
@@ -18,6 +22,8 @@ class SoquelServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/forrest.php', 'forrest');
+
         $this->app->register(\Omniphx\Forrest\Providers\Laravel\ForrestServiceProvider::class);
     }
 }

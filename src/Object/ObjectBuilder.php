@@ -2,6 +2,7 @@
 
 namespace AhmadWaleed\Soquel\Object;
 
+use AhmadWaleed\Soquel\Exceptions\NotFoundException;
 use Omniphx\Forrest\Client;
 use Illuminate\Support\Collection;
 use AhmadWaleed\Soquel\Query\Builder;
@@ -65,7 +66,13 @@ class ObjectBuilder
     /** @return Collection|BaseObject[] */
     public function get(): Collection
     {
-        return collect($this->client->query($this->toSOQL())['records'])
+        $records = $this->client->query($this->toSOQL())['records'];
+
+        if (!count($records)) {
+            throw new NotFoundException;
+        }
+
+        return collect($records)
             ->map(fn (array $object) => $this->object->fill($object));
     }
 

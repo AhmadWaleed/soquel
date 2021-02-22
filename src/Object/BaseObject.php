@@ -121,6 +121,10 @@ abstract class BaseObject implements Arrayable
 
     public function getWritableAttributes(array $excludes = []): array
     {
+        if (property_exists($this, 'externalIdKey')) {
+            array_push($excludes, $this->{'externalIdKey'});
+        }
+        
         return Arr::except($this->attributes, array_merge($this->readOnly, $excludes));
     }
 

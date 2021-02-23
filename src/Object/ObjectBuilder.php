@@ -51,7 +51,7 @@ class ObjectBuilder
 
     public function find(string $id): BaseObject
     {
-        $this->get()->where('Id', '=', $id);
+        $this->where('Id', '=', $id);
 
         return $this->first();
     }

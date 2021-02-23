@@ -75,13 +75,11 @@ abstract class BaseObject implements Arrayable
 
     public function __get(string $field)
     {
-        if (! isset($this->attributes[$field])) {
-            throw new \InvalidArgumentException("No such field {$field} exists.");
-        }
+        $value = isset($this->attributes[$field]) ? $this->attributes[$field] : null;
 
         $accessor = 'get'.ucfirst($field).'Attribute';
         if (method_exists($this, $accessor)) {
-            return $this->{$accessor}($this->attributes[$field]);
+            return $this->{$accessor}($value);
         }
 
         return $this->attributes[$field];
@@ -236,7 +234,7 @@ abstract class BaseObject implements Arrayable
 
             if ($relation instanceof ParentRelation) {
                 $model->fill($attributes[$relation->getRelationship()]);
-                $this->setAttribute($name, $model);
+                $this->setAttribute(str_replace($relation->getRelationship().'.', '', $name), $model);
             }
 
             if ($relation instanceof ChildRelation) {

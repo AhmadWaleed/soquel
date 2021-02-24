@@ -73,7 +73,11 @@ class ObjectBuilder
     public function get(): Collection
     {
         return collect($this->client->query($this->toSOQL())['records'])
-            ->map(fn (array $object) => $this->object->fill($object));
+            ->map(function (array $attributes) {
+                $object = clone $this->object;
+
+                return $object->fill($attributes);
+            });
     }
 
     public function getQuery(): Builder

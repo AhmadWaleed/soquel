@@ -77,6 +77,10 @@ abstract class BaseObject implements Arrayable
     {
         $value = isset($this->attributes[$field]) ? $this->attributes[$field] : null;
 
+        if (is_null($value)) {
+            return $value;
+        }
+
         $accessor = 'get'.ucfirst($field).'Attribute';
         if (method_exists($this, $accessor)) {
             return $this->{$accessor}($value);
@@ -240,7 +244,8 @@ abstract class BaseObject implements Arrayable
             if ($relation instanceof ChildRelation) {
                 $models = collect($attributes[$relation->getRelationship()]['records'])
                     ->map(function (array $item) use ($model) {
-                        $newModel = clone $model;
+                        $class = get_class($model);
+                        $newModel = new $class;
 
                         return $newModel->fill($item);
                     });

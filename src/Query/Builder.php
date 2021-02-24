@@ -79,6 +79,29 @@ class Builder
         return $this;
     }
 
+    public function whereIncludes(string $field, $value, string $boolean = 'AND'): self
+    {
+        if (empty($value)) {
+            return $this;
+        }
+
+        $this->normalizeWhereClause($boolean);
+
+        $condition = collect($value)
+            ->map(function ($value) {
+                if (is_array($value)) {
+                    $this->wrapQuotes(implode(';', $value));
+                }
+
+                return $this->wrapQuotes($value);
+            })
+            ->implode(', ');
+
+        $this->conditions[] = "{$field} includes ({$condition})";
+
+        return $this;
+    }
+
     public function orWhere(string $field, string $operator, $value): self
     {
         $this->where($field, $operator, $value, 'OR');

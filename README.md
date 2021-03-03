@@ -152,7 +152,7 @@ retrieve all (limited to 2000 by salesforce) of the records from the associated 
 ```php
 use App\Objects\Account;
 
-foreach(Account::query()->get() as $account) {
+foreach(Account::new()->query()->get() as $account) {
     echo $account->name;
 }
 ```
@@ -162,7 +162,8 @@ foreach(Account::query()->get() as $account) {
 Each Object class serves as query builder you add additional constraints to queries and invoke the get method to 
 retrieve the results:
 ```php
-$accounts = Account::query()
+$accounts = Account::new()
+                ->query()
                 ->where('name', 'LIKE', '%john%')
                 ->limit(10)
                 ->get();
@@ -176,7 +177,7 @@ The Object class extends Laravel's base Illuminate\Support\Collection class, whi
 for interacting with data collections. For example, the reject method may be used to remove objects from a collection 
 based on the results of an invoked closure
 ```php
-$accounts = Account::query()->whereNotNull('Email')->get();
+$accounts = Account::new()->query()->whereNotNull('Email')->get();
 $accounts = $accounts->reject(fn (Account $account) => $account->isActive);
 ```
 

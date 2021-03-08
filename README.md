@@ -40,6 +40,16 @@ Set following config with your salesforce credentials.
 ]
 ```
 
+Update the storage typ to `Session` or `Cache`, only these storage types are suppored at this time.
+```php
+'storage'        => [
+    'type'          => 'cache', // Options include: 'session', 'cache', 'object'
+    'path'          => 'forrest_', // unique storage path to avoid collisions
+    'expire_in'     => 60, // number of minutes to expire cache/session
+    'store_forever' => false, // never expire cache/session
+]
+```
+
 ## Basic Usage
 
 The content of config file will be published at `config/soquel.php`

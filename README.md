@@ -40,7 +40,7 @@ Set following config with your salesforce credentials.
 ]
 ```
 
-Update the storage typ to `Session` or `Cache`, only these storage types are suppored at this time.
+Update the storage type to `Session` or `Cache`, only these storage types are suppored at this time.
 ```php
 'storage'        => [
     'type'          => 'cache', // Options include: 'session', 'cache', 'object'

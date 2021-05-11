@@ -120,7 +120,16 @@ class ObjectTest extends TestCase
     }
 
     /** @test */
-    public function it_get_attribute_via_accessor_method()
+    public function it_sets_attribute_via_mutator_method()
+    {
+        $account = new Account();
+        $account->Date = '2021-05-11';
+
+        $this->assertInstanceOf(Carbon::class, $account->Date);
+    }
+
+    /** @test */
+    public function it_gets_attribute_via_accessor_method()
     {
         $account = new Account();
         $account->CreatedAt = $now = now()->toDateString();

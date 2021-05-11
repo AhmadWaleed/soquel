@@ -70,6 +70,11 @@ abstract class BaseObject implements Arrayable
 
     public function __set($field, $value): void
     {
+        $accessor = 'set'.ucfirst($field).'Attribute';
+        if (method_exists($this, $accessor)) {
+            $value = $this->{$accessor}($value);
+        }
+
         $this->setAttribute($field, $value);
     }
 

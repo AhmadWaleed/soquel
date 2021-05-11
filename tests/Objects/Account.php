@@ -17,6 +17,11 @@ class Account extends BaseObject
         return $this->childRelation(Contact::class);
     }
 
+    public function setDateAttribute($value): Carbon
+    {
+        return Carbon::parse($value);
+    }
+
     public function getCreatedAtAttribute($value): Carbon
     {
         return Carbon::parse($value);

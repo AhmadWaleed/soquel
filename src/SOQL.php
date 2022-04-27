@@ -18,6 +18,6 @@ class SOQL extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return new Builder;
+        return Builder::class;
     }
 }

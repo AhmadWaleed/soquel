@@ -56,43 +56,43 @@ The content of config file will be published at `config/soquel.php`
 
 * Retrieving All Rows From A Object
 ```php
-use AhmadWaleed\Soquel\SOQL;
+use AhmadWaleed\Soquel\Query\Builder;
 
-echo SOQL::object('Account')->select('Id', 'Name')->toSOQL();
+echo (new Builder)->object('Account')->select('Id', 'Name')->toSOQL();
 
 // Output: SELECT Id, Name FROM Account 
 ```
 
 * Where Clauses
 ```php
-SOQL::object('Account')->select('Id', 'Name')->where('Id', '=', 's3dty')->toSOQL();
-SOQL::object('Account')->select('Id', 'Name')->where('Name', 'Like', '%john%')->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->where('Id', '=', 's3dty')->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->where('Name', 'Like', '%john%')->toSOQL();
 ```
 
 * Additional Where Clauses
 ```php
-SOQL::object('Account')->select('Id', 'Name')->where('Id', '=', 's3dty')->orWhere('Id', '=', '2abc')->toSOQL();
-SOQL::object('Account')->select('Id', 'Name')->whereIn('Id', ['s3dty', 'ty4ii'])->toSOQL();
-SOQL::object('Account')->select('Id', 'Name')->whereNull('Name')->toSOQL();
-SOQL::object('Account')->select('Id', 'Name')->whereNotNull('Name')->toSOQL();
-SOQL::object('Account')->select('Id', 'Name')->whereRaw("DISTANCE(Contact__r.Geolocation__c, GEOLOCATION(15.623,35.949), 'km') < 1000")->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->where('Id', '=', 's3dty')->orWhere('Id', '=', '2abc')->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->whereIn('Id', ['s3dty', 'ty4ii'])->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->whereNull('Name')->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->whereNotNull('Name')->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->whereRaw("DISTANCE(Contact__r.Geolocation__c, GEOLOCATION(15.623,35.949), 'km') < 1000")->toSOQL();
 ```
 
 * Select Sub Query
 ```php
-SOQL::object('Account')->select('Id', 'Name')->selectSub(SOQL::object('Contact')->select('Id', 'Name'))->toSOQL();
+(new Builder)->object('Account')->select('Id', 'Name')->selectSub((new Builder)->object('Contact')->select('Id', 'Name'))->toSOQL();
 ```
 
 * Subquery Where Clauses
 ```php
-SOQL::object('Account')->select('Id')->whereIn('Id', SOQL::object('Contact')->select('Account.Id'))->toSOQL();
+(new Builder)->object('Account')->select('Id')->whereIn('Id', (new Builder)->object('Contact')->select('Account.Id'))->toSOQL();
 ```
 
 * Ordering & Limit
 ```php
-SOQL::object('Account')->select('Id')->orderBy('Id')->toSOQL(); // default order DESC
-SOQL::object('Account')->select('Id')->orderBy('Name', 'ACS')->toSOQL();
-SOQL::object('Account')->select('Id')->limit(1)->toSOQL();
+(new Builder)->object('Account')->select('Id')->orderBy('Id')->toSOQL(); // default order DESC
+(new Builder)->object('Account')->select('Id')->orderBy('Name', 'ACS')->toSOQL();
+(new Builder)->object('Account')->select('Id')->limit(1)->toSOQL();
 ```
 
 # ORM Usage
